@@ -1,44 +1,56 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), using the [Redux](https://redux.js.org/) and [Redux Toolkit](https://redux-toolkit.js.org/) template.
+﻿Medical inventory management
 
-## Available Scripts
 
-In the project directory, you can run:
+Title : medical inventory management is web based app use to manage and sell inventory of medical store which mainly consist of Authentication, Searching,Billing
 
-### `npm start`
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Overview: In this product web app is designed so that owners and employees of medical stores can easily manage the workload of selling, buying and maintaining stocks easily. Consider where a company owns multiple medical stores and is required to maintain stock of medicines which are expired or not and sell medicines to customers including billing automation. Customer visits medical store for his or her needs and ask for particular list of medicines which are then process by employees of store to complete request made by customer by searching availability, location of item in shelves etc are done through our web app.
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
 
-### `npm test`
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `npm run build`
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+Personas: This products are mainly targets for employees and owners of medical store and not anywhere related to customers of stores
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
+User Scenarios: Product will be used by 2 types of user Owner and employees of the store. 
+* Owner/Admin : Owner is like admin for a product. Owner can register a new employee by assigning him/her a username and password for the authentication process or access to the whole web app. Owner can do CRUD operations on employee data. Owner also has access to medicine CRUD operation and all authorities which are given to employees.
+* Employees/Users: Employee type of user only can have access to components like searching and billing only when admin or owner provides authentication. Where each employee can use a web app to complete customer requests i.e searching availability of medicines and billing total amount along with printing.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Requirements:
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Products requires Database,API,Searching Algorithm,Printing Bill technology
+* Database: simple structure database are required to store users, items and orders data with relation within each other
+   1. Users Table (Employee and Owner with super status field)
+   2. Medicine (detail of each medicine in store)
+   3. Order (detail of each order processed)
+   4. Company,Buyer and Manufacture are hierarchical to Medicines
+   5. Medicines (medicine out of stock)
 
-## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+* API : To Perform CRUD operations on Database and also for Authenticating.
+* Billing : It includes creating a cart and async function which make api calls to update the database on completion of order and billing. Billing for medical stores usually requires dotted printing. Hence qz tray technology can be used to communicate with dotted printers.
+* Searching algorithm - Searching will be done on the tags of the medicine used while adding a particular medicine & this will be handled using the medicine api with searched query parameters. We will be using a debouncing method to apply search on the UI side.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+
+Note - In case of multiple stores of a particular owner then the same search algorithm will be applied on all the medicine api tables of the respective stores. This will be only accessible to admin users.
+
+
+
+
+
+
+Designs:
+
+
+  
+
+
+
+
+
+Open Issues:
+Main issue is communicating with dotted printer due to lack of resources and experience on work of web printing

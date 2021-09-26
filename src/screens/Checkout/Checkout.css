@@ -1,0 +1,153 @@
+:root {
+  --theme-color: #28b8b0;
+}
+
+.checkout-page-content-wrapper {
+  display: flex;
+}
+
+.checkout-page-wrapper {
+  padding: 0 80px;
+  display: flex;
+  flex-direction: column;
+}
+
+.checkout-payment-details {
+  width: 430px;
+  margin-left: 0.75rem;
+}
+
+@media only screen and (max-width: 768px) {
+  .checkout-page-content-wrapper {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .checkout-page-wrapper {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .checkout-payment-details {
+    width: 100%;
+    margin-left: 0;
+  }
+}
+
+.order-summary-wrapper {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.products-wrapper {
+  margin: 1.25rem 0;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.margin-bottom-12 {
+  margin-bottom: 0.75rem;
+}
+
+.medicine-card-wrapper {
+  display: flex;
+  margin-bottom: 1.125rem;
+  padding-bottom: 1.125rem;
+  flex-direction: column;
+  border-bottom: 0.125rem solid #c4c4c4;
+}
+
+.flex-content-sb {
+  display: flex;
+  justify-content: space-between;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.font-weight-700 {
+  font-weight: 700;
+}
+
+.tablets-strip {
+  font-size: 0.75rem;
+  color: #757575;
+}
+
+.checkout-price {
+  color: #ff6f61;
+  font-weight: bold;
+}
+
+.checkout-page--counter-wrapper {
+  display: flex;
+  margin-top: 1.25rem;
+  justify-content: space-between;
+}
+
+.display-flex {
+  display: flex;
+}
+
+.increment-decrement-counter-wrapper {
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  cursor: pointer;
+  font-size: 1.5rem;
+  border-radius: 50%;
+  align-items: flex-end;
+  justify-content: center;
+  background-color: #fafafa;
+}
+
+.checkout-page--counter-value {
+  margin: 0 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.add-more-items {
+  color: var(--theme-color);
+  text-align: right;
+  font-weight: bold;
+}
+
+.opacity-6 {
+  opacity: 0.6;
+}
+
+.total-amount {
+  display: flex;
+  margin-top: 1.125rem;
+  font-weight: bold;
+  margin-bottom: 1.125rem;
+  justify-content: space-between;
+}
+
+.total-amoount-wrapper {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.total-amount-wrapper {
+  opacity: 0.6;
+  font-size: 0.75rem;
+  font-weight: bold;
+}
+
+.font-weight-bold {
+  font-weight: bold;
+}
+
+.checkout-proceed-button {
+  border: none;
+  background-color: var(--theme-color);
+}

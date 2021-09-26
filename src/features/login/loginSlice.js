@@ -32,8 +32,9 @@ export const loginSlice = createSlice({
   name: 'login',
   initialState,
   reducers: {
-    log: (state) => {
+    log: (state,action) => {
       state.loggedIn = true;
+      state.isAdmin = action.payload
     }},
   extraReducers: (builder) => {
     builder

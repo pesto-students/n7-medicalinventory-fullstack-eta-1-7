@@ -25,7 +25,7 @@ function LoginScreen() {
                         password: password
                       }
                   })
-                dispatch(log())
+                dispatch(log(response.data.isAdmin))
                 ls.set('token', response.data.token)
                 history.replace('/')
             } 

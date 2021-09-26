@@ -6,6 +6,7 @@ const initialState = {
   value: 0,
   loggedIn:false,
   status: 'idle',
+  isAdmin:false,
   error:''
 };
 

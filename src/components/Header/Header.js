@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Navbar, Container, Nav, Form, Button } from "react-bootstrap";
 import {
   PersonCircle,
@@ -8,10 +8,19 @@ import {
 } from "react-bootstrap-icons";
 import "./Header.css";
 import { useHistory } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { getSearchedData } from "../../features/search/searchSlice";
 
 const Header = () => {
-  let history = useHistory();
+  const dispatch = useDispatch();
+  const history = useHistory();
   const [searchedQuery, setSearchedQuery] = useState("");
+
+  const getSearchedData = () => {
+    console.log({ searchedQuery });
+    dispatch(getSearchedData({ searchedQuery }));
+  };
+
   return (
     <div>
       <Navbar
@@ -55,6 +64,9 @@ const Header = () => {
                     borderTopLeftRadius: 0,
                     borderBottomLeftRadius: 0,
                     backgroundColor: "#28b8b0",
+                  }}
+                  onClick={() => {
+                    getSearchedData();
                   }}
                 >
                   <Search size={25} />

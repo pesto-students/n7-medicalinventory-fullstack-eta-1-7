@@ -9,8 +9,12 @@ import {
 } from "react-bootstrap";
 import { FunnelFill } from "react-bootstrap-icons";
 import "./SearchPage.css";
+import { useSelector } from "react-redux";
+
 const SearchPage = () => {
+  const searchedData = useSelector((state) => state.search.searchedData);
   const [show, setShow] = useState(false);
+  console.log(searchedData);
 
   return (
     <div className="display-flex">

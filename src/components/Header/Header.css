@@ -1,9 +1,14 @@
 :root {
   --search-box-width: 500px;
+  --white-color: #fff;
 }
 
 .search-box {
   display: flex;
+}
+
+.nav-bar--small-screen {
+  color: var(--white-color);
 }
 
 @media screen and (min-width: 786px) {
@@ -14,6 +19,23 @@
     position: absolute;
     transform: translate(-50%);
     display: flex;
+  }
+  .nav-bar--small-screen {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 786px) {
+  .search-box {
+    margin-top: 0.5rem;
+  }
+
+  .nav-icon--right {
+    margin-top: 0.5rem;
+    display: none;
+  }
+  .nav-bar--small-screen {
+    display: block;
   }
 }
 
@@ -40,4 +62,9 @@
 
 .cursor-pointer {
   cursor: pointer;
+}
+
+.nav-bar-icons--responsive {
+  cursor: pointer;
+  margin-top: 0.5rem;
 }

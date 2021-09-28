@@ -5,11 +5,15 @@ import {
   CartFill,
   PlusCircle,
   Search,
+  PersonPlus,
 } from "react-bootstrap-icons";
 import "./Header.css";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getSearchedData } from "../../features/search/searchSlice";
+import ls from "local-storage";
+
+const IS_ADMIN = ls.get("isAdmin") === "true" ? true : false;
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -73,8 +77,16 @@ const Header = () => {
                 </Button>
               </Form>
             </Nav>
+
             <Nav>
-              <div>
+              <div className="nav-icon--right">
+                {IS_ADMIN && (
+                  <PersonPlus
+                    size={30}
+                    color="#28b8b0"
+                    className="pointer-margin-right-20"
+                  />
+                )}
                 <PlusCircle
                   size={30}
                   color="#28b8b0"
@@ -93,6 +105,46 @@ const Header = () => {
                   color="#28b8b0"
                   className="cursor-pointer"
                 />
+              </div>
+            </Nav>
+            {IS_ADMIN && (
+              <Nav className="nav-bar--small-screen">
+                <div className="nav-bar-icons--responsive">
+                  <span>
+                    <PersonPlus size={30} color="#28b8b0" />
+                  </span>
+                  &nbsp; Add Employee
+                </div>
+              </Nav>
+            )}
+            <Nav className="nav-bar--small-screen">
+              <div className="nav-bar-icons--responsive">
+                <span>
+                  <PlusCircle size={30} color="#28b8b0" />
+                </span>
+                &nbsp; Add Medicine
+              </div>
+            </Nav>
+            <Nav className="nav-bar--small-screen">
+              <div className="nav-bar-icons--responsive">
+                <span>
+                  <CartFill
+                    size={30}
+                    color="#28b8b0"
+                    onClick={() => {
+                      history.push("/checkout");
+                    }}
+                  />
+                </span>
+                &nbsp; Go To Cart
+              </div>
+            </Nav>
+            <Nav className="nav-bar--small-screen">
+              <div className="nav-bar-icons--responsive">
+                <span>
+                  <PersonCircle size={30} color="#28b8b0" />
+                </span>
+                &nbsp; Profile
               </div>
             </Nav>
           </Navbar.Collapse>

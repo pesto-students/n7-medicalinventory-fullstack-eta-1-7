@@ -23,7 +23,7 @@ export const getSearchedData = createAsyncThunk(
 
     console.log(config);
     await axios
-      .get(`/search`, config)
+      .post(`/search`, null, config)
       .then((response) => {
         console.log(response);
         return response.data.data;

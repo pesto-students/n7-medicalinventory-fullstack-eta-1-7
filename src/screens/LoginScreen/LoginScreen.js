@@ -31,6 +31,7 @@ function LoginScreen() {
         );
         dispatch(log());
         ls.set("token", response.data.token);
+        ls.set("isAdmin", response.data.isAdmin ? "true" : "false");
         history.replace("/");
       } catch (error) {
         console.log(error.message);

@@ -23,6 +23,7 @@ export const fetchShops = createAsyncThunk(
       } 
         catch (error) {
             alert("Authentication denied")
+            ls.remove('token')
            return thunkAPI.rejectWithValue( error.message);
         }
     }

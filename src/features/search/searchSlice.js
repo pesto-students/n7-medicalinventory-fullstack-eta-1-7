@@ -11,13 +11,13 @@ const initialState = {
 export const getSearchedData = createAsyncThunk(
   "searchSlice/getSearchedData",
   async (data, thunkAPI) => {
-    console.log(data);
+    console.log(data, "Searched DATA");
     let config = {
       headers: {
         Authorization: `Token ${ls.get("token")}`,
       },
       params: {
-        searchQuery: data.searchQuery,
+        searchQuery: data.searchedQuery,
       },
     };
 

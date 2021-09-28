@@ -16,10 +16,19 @@ function LoginScreen() {
     if (name.trim().length > 0 && password.trim().length > 0) {
       try {
         console.log(name, password);
-        const response = await axios.post("/api-token-auth/", {
-          username: name,
-          password: password,
-        });
+        const response = await axios.post(
+          "/api-token-auth/",
+          {},
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+            auth: {
+              username: name,
+              password: password,
+            },
+          }
+        );
         dispatch(log());
         ls.set("token", response.data.token);
         history.replace("/");

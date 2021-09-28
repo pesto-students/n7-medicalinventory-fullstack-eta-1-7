@@ -16,9 +16,9 @@ const Header = () => {
   const history = useHistory();
   const [searchedQuery, setSearchedQuery] = useState("");
 
-  const getSearchedData = () => {
+  const getFilteredData = async () => {
     console.log({ searchedQuery });
-    dispatch(getSearchedData({ searchedQuery }));
+    await dispatch(getSearchedData({ searchedQuery: searchedQuery }));
   };
 
   return (
@@ -66,7 +66,7 @@ const Header = () => {
                     backgroundColor: "#28b8b0",
                   }}
                   onClick={() => {
-                    getSearchedData();
+                    getFilteredData();
                   }}
                 >
                   <Search size={25} />

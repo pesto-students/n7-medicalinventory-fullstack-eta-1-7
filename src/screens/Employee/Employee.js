@@ -4,13 +4,18 @@ import './Employee.css'
 import axios from '../../axios'
 import {useDispatch,useSelector} from 'react-redux'
 import { useHistory } from 'react-router'
-
+import ls from 'local-storage'
 function Employee() {
     const history = useHistory()
     const handleSubmit = async (values) => {
         console.log(values)
             try {
-                const response = await axios.post('/api/employee/',values)
+                const response = await axios.post('/api/employee/',values, {headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Token ${ls.get('token')}` 
+
+                    
+                }})
                 console.log(response)
                 history.replace('/')
             } 
@@ -20,12 +25,35 @@ function Employee() {
 
               }
     }
+
+    const handleBlur = (values) => {
+        console.log(values)
+    }
+    const check_username_exists = (username) => {
+        console.log(username)
+        if(username.trim()){
+            try {
+                const response = axios.post('/username-exists/',{username:username}, {headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Token ${ls.get('token')}`  
+                }})
+                return true
+            } 
+              catch (error) {
+                  console.log("here")
+                  return false
+    
+              }
+
+        }
+        
+    }
     return (
         <div className="employee__main">
             <div className="employee__container">
             <h1>Register Employee</h1>
             <Formik
-            initialValues={{ email: '', password: '' ,name:'',username:'',joining_date:'',phone:''}}
+            initialValues={{ email: '', password: '' ,first_name:'',username:'',date_joined:'',phone:''}}
         
         
             validate={values => {
@@ -40,6 +68,10 @@ function Employee() {
                 if(!values.username){
                     errors.username = 'Required'
                 }
+                if(!check_username_exists(values.username)){
+                    errors.username = 'user  exists'
+                }
+                
                 return errors;
             }}
             onSubmit={handleSubmit}
@@ -69,10 +101,10 @@ function Employee() {
                 <input
                     className="employee__field_input"
                     type="text"
-                    name="name"
+                    name="first_name"
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    value={values.name}
+                    value={values.first_name}
                     placeholder="Name"
                 />
                 
@@ -108,9 +140,9 @@ function Employee() {
                 placeholder="joining_date" 
                 onChange={handleChange}
                 onBlur={handleBlur}
-                value={values.joining_date}
-                name="joining_date"/>
-                {errors.joining_date && touched.joining_date && errors.joining_date}
+                value={values.date_joined}
+                name="date_joined"/>
+                {errors.date_joined && touched.date_joined && errors.date_joined}
                 </div>
                 <div className="employee__field">
                 <input 

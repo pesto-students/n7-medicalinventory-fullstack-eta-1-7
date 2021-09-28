@@ -32,6 +32,10 @@ export const loginSlice = createSlice({
   name: 'login',
   initialState,
   reducers: {
+    logout:(state) => {
+      state.loggedIn = false;
+      state.isAdmin = false
+    },
     log: (state,action) => {
       state.loggedIn = true;
       state.isAdmin = action.payload
@@ -54,7 +58,7 @@ export const loginSlice = createSlice({
   },
 });
 
-export const { log } = loginSlice.actions;
+export const { log,logout } = loginSlice.actions;
 export const selectUser = (state) => state
 export const selectLoggedIn = (state) => state.login.loggedIn
 

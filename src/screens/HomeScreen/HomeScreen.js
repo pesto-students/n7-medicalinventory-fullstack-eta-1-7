@@ -2,6 +2,7 @@ import React from 'react'
 import Card from 'react-bootstrap/Card';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
+import { logout } from '../../features/login/loginSlice';
 import { currentShop } from '../../features/shop/shopSlice';
 import './Home.css'
 function HomeScreen() {
@@ -10,7 +11,8 @@ function HomeScreen() {
     return (
         <div className="home__container">
             {shops?.map(item => (
-                <Card onClick={() => dispatch(currentShop(item.id))} style={{ width: '40rem',marginTop:"2rem"}}>
+                <Card onClick={() => {
+                    dispatch(currentShop(item.id))}} style={{ width: '40rem',marginTop:"2rem"}}>
                 <Card.Body style={{textAlign:'center',fontSize:'2rem',margin:'1rem'}}>{item.name}</Card.Body>
               </Card>
 

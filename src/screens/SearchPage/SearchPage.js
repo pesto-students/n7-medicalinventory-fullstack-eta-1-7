@@ -16,7 +16,7 @@ const SearchPage = () => {
   const [show, setShow] = useState(false);
 
   return (
-    <div className="display-flex">
+    <div className="search-page-wrapper">
       <div className="search-page--left-panel">
         <Accordion flush className="m-b-12">
           <Accordion.Item eventKey="0">
@@ -134,7 +134,7 @@ const SearchPage = () => {
                   </div>
 
                   <div className="search-page--counter-wrapper">
-                    <div className="display-flex">
+                    <div className="search-page-wrapper">
                       <div className="increment-decrement-counter-wrapper">
                         -
                       </div>

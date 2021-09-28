@@ -23,7 +23,7 @@ const Checkout = () => {
                   </div>
 
                   <div className="checkout-page--counter-wrapper">
-                    <div className="display-flex">
+                    <div className="checkout-counter--wrapper">
                       <div className="increment-decrement-counter-wrapper">
                         -
                       </div>

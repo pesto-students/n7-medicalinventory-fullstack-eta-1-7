@@ -11,9 +11,16 @@ import { FunnelFill } from "react-bootstrap-icons";
 import "./SearchPage.css";
 import { useSelector } from "react-redux";
 
+const SORT_BY_MENUS = [
+  { label: "Relevance", value: "relevance" },
+  { label: "Price: Low to High", value: "lowToHigh" },
+  { label: "Price: High to Low", value: "highToLow" },
+];
+
 const SearchPage = () => {
   const searchedData = useSelector((state) => state.search.searchedData);
   const [show, setShow] = useState(false);
+  const [sortBy, setSortBy] = useState("Relevance");
 
   return (
     <div className="search-page-wrapper">
@@ -94,24 +101,22 @@ const SearchPage = () => {
           <div className="flex-items-center">
             <span>Sort By</span>
             <span>
-              <Dropdown className="dropdown-wrapper">
+              <Dropdown
+                className="dropdown-wrapper"
+                onSelect={(value) => {
+                  setSortBy(value);
+                }}
+              >
                 <Dropdown.Toggle variant="white" id="dropdown-basic">
-                  Relevance
+                  {sortBy}
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu>
-                  <Dropdown.Item href="#/action-1">Relevance</Dropdown.Item>
-                  <Dropdown.Item href="#/action-2">Popularity</Dropdown.Item>
-                  <Dropdown.Item href="#/action-3">
-                    Average Customer Rating
-                  </Dropdown.Item>
-                  <Dropdown.Item href="#/action-4">
-                    Price: Low to High
-                  </Dropdown.Item>
-                  <Dropdown.Item href="#/action-5">
-                    Price: High to Low
-                  </Dropdown.Item>
-                  <Dropdown.Item href="#/action-6">Discount</Dropdown.Item>
+                  {SORT_BY_MENUS.map((item) => (
+                    <Dropdown.Item eventKey={item.label} key={item.value}>
+                      {item.label}
+                    </Dropdown.Item>
+                  ))}
                 </Dropdown.Menu>
               </Dropdown>
             </span>

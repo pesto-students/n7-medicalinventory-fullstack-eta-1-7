@@ -10,19 +10,23 @@ const initialState = {
 };
 
 export const fetchShops = createAsyncThunk(
-  "shop/fetchShops",
-  async (thunkAPI) => {
-    try {
-      const response = await axios.get("/api/company/", {
-        headers: {
-          Authorization: `Token ${AUTH_TOKEN}`,
-        },
-      });
-      console.log(response.data);
-      return response.data.data;
-    } catch (error) {
-      alert("Authentication denied");
-      return thunkAPI.rejectWithValue(error.message);
+    'shop/fetchShops',
+    async (thunkAPI) => {
+      try {
+          const response = await axios.get('/api/company/',{
+            headers: {
+              'Authorization': `Token ${AUTH_TOKEN}`
+            }
+          })
+          console.log(response.data)
+          return response.data.data
+    
+      } 
+        catch (error) {
+            alert("Authentication denied")
+            ls.remove('token')
+           return thunkAPI.rejectWithValue( error.message);
+        }
     }
   }
 );

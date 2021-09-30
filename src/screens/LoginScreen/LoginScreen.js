@@ -28,7 +28,7 @@ function LoginScreen() {
             },
           }
         );
-        dispatch(log());
+        dispatch(log(response.data.isAdmin))
         setAuthToken("token", response.data.token);
         setAuthToken("isAdmin", response.data.isAdmin ? "true" : "false");
         history.replace("/");

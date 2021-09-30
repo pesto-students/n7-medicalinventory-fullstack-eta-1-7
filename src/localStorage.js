@@ -6,3 +6,7 @@ export const IS_ADMIN_USER = ls.get("isAdmin");
 export const setAuthToken = (key, value) => {
   ls.set(key, value);
 };
+
+export const removeToken = (key) => {
+  ls.remove(key);
+};

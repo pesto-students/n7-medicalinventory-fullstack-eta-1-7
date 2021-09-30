@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "../../axios";
-import ls from "local-storage";
+import { AUTH_TOKEN } from "../../localStorage";
 
 const initialState = {
   status: "idle",
@@ -11,25 +11,21 @@ const initialState = {
 export const getSearchedData = createAsyncThunk(
   "searchSlice/getSearchedData",
   async (data, thunkAPI) => {
-    console.log(data, "Searched DATA");
     let config = {
       headers: {
-        Authorization: `Token ${ls.get("token")}`,
+        Authorization: `Token ${AUTH_TOKEN}`,
       },
       params: {
         searchQuery: data.searchedQuery,
       },
     };
 
-    console.log(config);
     await axios
-      .post(`/search`, null, config)
+      .get(`/search`, config)
       .then((response) => {
-        console.log(response);
         return response.data.data;
       })
       .catch((error) => {
-        console.log(error);
         return thunkAPI.rejectWithValue(error.message);
       });
   }

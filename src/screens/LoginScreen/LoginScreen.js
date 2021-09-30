@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "../../axios";
-import ls from "local-storage";
-
 import "./Login.css";
 import { log } from "../../features/login/loginSlice";
 import { useHistory } from "react-router";
+import { setAuthToken } from "../../localStorage";
 
 function LoginScreen() {
   const [name, setName] = useState("");
@@ -30,8 +29,8 @@ function LoginScreen() {
           }
         );
         dispatch(log());
-        ls.set("token", response.data.token);
-        ls.set("isAdmin", response.data.isAdmin ? "true" : "false");
+        setAuthToken("token", response.data.token);
+        setAuthToken("isAdmin", response.data.isAdmin ? "true" : "false");
         history.replace("/");
       } catch (error) {
         console.log(error.message);

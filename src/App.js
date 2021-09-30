@@ -10,11 +10,11 @@ import {
   selectLoggedIn,
   selectUser,
 } from "./features/login/loginSlice";
-import ls from "local-storage";
 import Landing from "./screens/LoginScreen/Landing";
 import Employee from "./screens/Employee/Employee";
 import Header from "./components/Header/Header";
 import ErrorBoundry from "./components/ErrorBoundary";
+import { AUTH_TOKEN } from "./localStorage";
 
 const Checkout = React.lazy(() =>
   import(/* webpackChunkName: 'checkout' */ "./screens/Checkout/Checkout")
@@ -33,11 +33,11 @@ function App() {
   const dispatch = useDispatch();
 
   console.log(loggedIn);
-  const user = ls.get("token");
+  const user = AUTH_TOKEN;
   const shops = useSelector((state) => state.shop.shops);
 
   useEffect(() => {
-    const token = ls.get("token");
+    const token = AUTH_TOKEN;
     console.log(token);
     if (token) {
       dispatch(log());
@@ -62,7 +62,7 @@ function App() {
                       component={shops.length === 0 ? Landing : HomeScreen}
                     ></Route>
                     <Route path="/employee" component={Employee}></Route>
-                    <Route path="/search" component={SearchPage} />
+                    <Route path="/search/:params?" component={SearchPage} />
                     <Route path="/checkout" component={Checkout} />
                     <Route path="/medicine" component={Medicine} />
                   </Switch>

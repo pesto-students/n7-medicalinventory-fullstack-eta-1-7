@@ -8,12 +8,12 @@ import {
   PersonPlus,
 } from "react-bootstrap-icons";
 import "./Header.css";
-import { useHistory, useLocation } from "react-router-dom";
+import { useHistory, useLocation, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getSearchedData } from "../../features/search/searchSlice";
-import ls from "local-storage";
+import { IS_ADMIN_USER } from "../../localStorage";
 
-const IS_ADMIN = ls.get("isAdmin") === "true" ? true : false;
+const IS_ADMIN = IS_ADMIN_USER === "true" ? true : false;
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -22,12 +22,12 @@ const Header = () => {
   const [searchedQuery, setSearchedQuery] = useState("");
 
   const getFilteredData = async () => {
-    console.log({ searchedQuery });
     await dispatch(getSearchedData({ searchedQuery: searchedQuery }));
 
-    if (searchedQuery && !location.pathname.includes("search")) {
-      history.push("/search");
-    }
+    history.push({
+      pathname: `/search`,
+      search: `?searchedQuery=${searchedQuery}`,
+    });
   };
 
   return (

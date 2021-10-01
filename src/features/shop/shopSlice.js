@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "../../axios";
 import { AUTH_TOKEN, removeToken } from "../../localStorage";
+import { toast } from "../../components/Toast/Toast";
 
 const initialState = {
   shops: [],
@@ -21,7 +22,7 @@ export const fetchShops = createAsyncThunk(
       console.log(response.data);
       return response.data.data;
     } catch (error) {
-      alert("Authentication denied");
+      toast.error("Authentication denied");
       removeToken("token");
       return thunkAPI.rejectWithValue(error.message);
     }

@@ -6,11 +6,14 @@ import App from "./App";
 import { store } from "./app/store";
 import { Provider } from "react-redux";
 import * as serviceWorker from "./serviceWorker";
+import { AppWrapper } from "./components/AppWrapper/AppWrapper";
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <AppWrapper>
+        <App />
+      </AppWrapper>
     </Provider>
   </React.StrictMode>,
   document.getElementById("root")

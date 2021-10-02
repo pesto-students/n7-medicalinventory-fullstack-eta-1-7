@@ -4,17 +4,10 @@ import { setAuthToken } from "../../localStorage";
 
 const initialState = {
   value: 0,
-<<<<<<< HEAD
   loggedIn:false,
   status: 'idle',
   isAdmin:false,
   error:''
-=======
-  loggedIn: false,
-  status: "idle",
-  isAdmin:false,
-  error: "",
->>>>>>> 9bfdf4148401f62410718ebcb5f619bd8996d97f
 };
 
 export const createTokenAsync = createAsyncThunk(
@@ -37,13 +30,10 @@ export const loginSlice = createSlice({
   name: "login",
   initialState,
   reducers: {
-<<<<<<< HEAD
     logout:(state) => {
       state.loggedIn = false;
       state.isAdmin = false
     },
-=======
->>>>>>> 9bfdf4148401f62410718ebcb5f619bd8996d97f
     log: (state,action) => {
       state.loggedIn = true;
       state.isAdmin = action.payload
@@ -66,15 +56,8 @@ export const loginSlice = createSlice({
   },
 });
 
-<<<<<<< HEAD
 export const { log,logout } = loginSlice.actions;
-export const selectUser = (state) => state
-export const selectLoggedIn = (state) => state.login.loggedIn
-
-=======
-export const { log } = loginSlice.actions;
 export const selectUser = (state) => state;
 export const selectLoggedIn = (state) => state.login.loggedIn;
->>>>>>> 9bfdf4148401f62410718ebcb5f619bd8996d97f
-
+export const selectIsAdmin = (state) => state.login.isAdmin;
 export default loginSlice.reducer;

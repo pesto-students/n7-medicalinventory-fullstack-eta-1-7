@@ -50,6 +50,7 @@
   width: 70%;
   height: 100%;
   display: flex;
+  flex-direction: column;
 }
 
 input.employee__field_input {
@@ -61,7 +62,12 @@ input.employee__field_input {
   margin-right: 5px;
 }
 
-.employee__button:hover {
-  background-color: #ccc;
-  cursor: pointer;
+.employee__button {
+  background-color: #00b9bc;
+  color: var(--off-white);
+  font-weight: bold;
+  text-transform: uppercase;
+}
+.employee__button :hover {
+  background-color: #197071;
 }

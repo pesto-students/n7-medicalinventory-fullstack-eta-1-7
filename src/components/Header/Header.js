@@ -11,12 +11,12 @@ import "./Header.css";
 import { useHistory, useLocation, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getSearchedData } from "../../features/search/searchSlice";
-import { IS_ADMIN_USER } from "../../localStorage";
+import { selectIsAdmin } from "../../features/login/loginSlice";
 
-const IS_ADMIN = IS_ADMIN_USER === "true" ? true : false;
 
 const Header = () => {
   const dispatch = useDispatch();
+  const isAdmin = useSelector(selectIsAdmin)
   const history = useHistory();
   const location = useLocation();
   const [searchedQuery, setSearchedQuery] = useState("");
@@ -85,11 +85,14 @@ const Header = () => {
 
             <Nav>
               <div className="nav-icon--right">
-                {IS_ADMIN && (
+                {isAdmin && (
                   <PersonPlus
                     size={30}
                     color="#28b8b0"
                     className="pointer-margin-right-20"
+                    onClick={() => {
+                      history.push("/employee");
+                    }}
                   />
                 )}
                 <PlusCircle
@@ -112,7 +115,7 @@ const Header = () => {
                 />
               </div>
             </Nav>
-            {IS_ADMIN && (
+            {isAdmin && (
               <Nav className="nav-bar--small-screen">
                 <div className="nav-bar-icons--responsive">
                   <span>

@@ -3,44 +3,45 @@ import { Container, Row, Col, Button } from "react-bootstrap";
 import TextField from "../../components/TextField/TextField";
 import * as Yup from "yup";
 import { Formik, Form } from "formik";
+import axios from "axios";
 
 const MedicineForm = () => {
   const validate = Yup.object({
-    medicineName: Yup.string().required("Required*"),
-    companyName: Yup.string().required("Required*"),
+    name: Yup.string().required("Required*"),
+    company: Yup.string().required("Required*"),
     buyerName: Yup.string().required("Required*"),
-    manufacturerName: Yup.string().required("Required*"),
-    qtyInStrip: Yup.string().required("Required*"),
-    inStockTotal: Yup.string().required("Required*"),
-    freeStrip: Yup.string().required("Required*"),
+    manufacture: Yup.string().required("Required*"),
+    qty_in_strip: Yup.string().required("Required*"),
+    in_stock_total: Yup.string().required("Required*"),
+    free_strip: Yup.string().required("Required*"),
     description: Yup.string().required("Required*"),
-    shelfNo: Yup.string().required("Required*"),
-    batchNo: Yup.string().required("Required*"),
-    sGst: Yup.string().required("Required*"),
-    cGst: Yup.string().required("Required*"),
-    sellPrice: Yup.string().required("Required*"),
-    buyPrice: Yup.string().required("Required*"),
-    medicineTags: Yup.string().required("Required*"),
+    shelf_no: Yup.string().required("Required*"),
+    batch_no: Yup.string().required("Required*"),
+    s_gst: Yup.string().required("Required*"),
+    c_gst: Yup.string().required("Required*"),
+    sell_price: Yup.string().required("Required*"),
+    buy_price: Yup.string().required("Required*"),
+    medicine_tags: Yup.string().required("Required*"),
   });
   return (
     <Formik
       validationSchema={validate}
       initialValues={{
-        medicineName: "",
-        companyName: "",
+        name: "",
+        company: "",
         buyerName: "",
-        manufacturerName: "",
-        qtyInStrip: "",
-        inStockTotal: "",
-        freeStrip: "",
+        manufacture: "",
+        qty_in_strip: "",
+        in_stock_total: "",
+        free_strip: "",
         description: "",
-        shelfNo: "",
-        batchNo: "",
-        sGst: "",
-        cGst: "",
-        sellPrice: "",
-        buyPrice: "",
-        medicineTags: "",
+        shelf_no: "",
+        batch_no: "",
+        s_gst: "",
+        c_gst: "",
+        sell_price: "",
+        buy_price: "",
+        medicine_tags: "",
       }}
       onSubmit={(values) => {
         console.log(values);
@@ -52,18 +53,10 @@ const MedicineForm = () => {
             <Container>
               <Row>
                 <Col md={6}>
-                  <TextField
-                    label="Medicine Name"
-                    name="medicineName"
-                    type="text"
-                  />
+                  <TextField label="Medicine Name" name="name" type="text" />
                 </Col>
                 <Col md={6}>
-                  <TextField
-                    label="Company Name"
-                    name="companyName"
-                    type="text"
-                  />
+                  <TextField label="Company Name" name="company" type="text" />
                 </Col>
               </Row>
 
@@ -71,14 +64,14 @@ const MedicineForm = () => {
                 <Col md={6}>
                   <TextField
                     type="text"
-                    name="manufacturerName"
+                    name="manufacture"
                     label="Manufacturer Name"
                   />
                 </Col>
                 <Col md={6}>
                   <TextField
                     type="text"
-                    name="qtyInStrip"
+                    name="qty_in_strip"
                     label="Quantity In Strip"
                   />
                 </Col>
@@ -88,12 +81,12 @@ const MedicineForm = () => {
                 <Col md={6}>
                   <TextField
                     type="text"
-                    name="inStockTotal"
+                    name="in_stock_total"
                     label="In Stock Total"
                   />
                 </Col>
                 <Col md={6}>
-                  <TextField type="text" name="freeStrip" label="Free Strip" />
+                  <TextField type="text" name="free_strip" label="Free Strip" />
                 </Col>
               </Row>
 
@@ -106,36 +99,36 @@ const MedicineForm = () => {
                   />
                 </Col>
                 <Col md={6}>
-                  <TextField type="text" name="shelfNo" label="Shelf Number" />
+                  <TextField type="text" name="shelf_no" label="Shelf Number" />
                 </Col>
               </Row>
 
               <Row>
                 <Col md={6}>
-                  <TextField type="text" name="batchNo" label="Batch Number" />
+                  <TextField type="text" name="batch_no" label="Batch Number" />
                 </Col>
                 <Col md={6}>
-                  <TextField type="text" name="sGst" label="SGST" />
-                </Col>
-              </Row>
-
-              <Row>
-                <Col md={6}>
-                  <TextField type="text" name="cGst" label="CGST" />
-                </Col>
-                <Col md={6}>
-                  <TextField type="text" name="sellPrice" label="Sell Price" />
+                  <TextField type="text" name="s_gst" label="SGST" />
                 </Col>
               </Row>
 
               <Row>
                 <Col md={6}>
-                  <TextField type="text" name="buyPrice" label="Buy Price" />
+                  <TextField type="text" name="c_gst" label="CGST" />
+                </Col>
+                <Col md={6}>
+                  <TextField type="text" name="sell_price" label="Sell Price" />
+                </Col>
+              </Row>
+
+              <Row>
+                <Col md={6}>
+                  <TextField type="text" name="buy_price" label="Buy Price" />
                 </Col>
                 <Col md={6}>
                   <TextField
                     type="text"
-                    name="medicineTags"
+                    name="medicine_tags"
                     label="Medicine Tags"
                   />
                 </Col>

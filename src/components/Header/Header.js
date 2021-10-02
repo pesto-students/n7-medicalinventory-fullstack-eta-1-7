@@ -21,13 +21,22 @@ const Header = () => {
   const location = useLocation();
   const [searchedQuery, setSearchedQuery] = useState("");
 
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    if (params.get("searchedQuery")) {
+      setSearchedQuery(params.get("searchedQuery"));
+    }
+  }, []);
+
   const getFilteredData = async () => {
     await dispatch(getSearchedData({ searchedQuery: searchedQuery }));
 
-    history.push({
-      pathname: `/search`,
-      search: `?searchedQuery=${searchedQuery}`,
-    });
+    const params = new URLSearchParams();
+    if (searchedQuery) {
+      params.set("searchedQuery", searchedQuery);
+    }
+
+    history.push({ search: params.toString() });
   };
 
   return (

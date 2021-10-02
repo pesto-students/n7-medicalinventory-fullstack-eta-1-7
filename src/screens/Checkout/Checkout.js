@@ -1,8 +1,58 @@
 import React from "react";
 import { Card, Button } from "react-bootstrap";
+import { PDFInvoice } from "../../common/invoice";
 import "./Checkout.css";
 
 const Checkout = () => {
+  const invoiceGenerator = () => {
+    const logo = "https://public.easyinvoice.cloud/img/logo_en_original.png";
+    const senderDetails = {
+      company: "Sample Corp",
+      address: "Sample Street 123",
+      zip: "1234 AB",
+      city: "Sampletown",
+      country: "Samplecountry",
+    };
+    const clientDetails = {
+      company: "Client Corp",
+      address: "Clientstreet 456",
+      zip: "4567 CD",
+      city: "Clientcity",
+      country: "Clientcountry",
+    };
+    const invoiceNumber = "2021.0001";
+    const invoiceDate = "1.1.2021";
+    const products = [
+      {
+        quantity: "2",
+        description: "Test1",
+        tax: 6,
+        price: 33.87,
+      },
+      {
+        quantity: "4",
+        description: "Test2",
+        tax: 21,
+        price: 10.45,
+      },
+      {
+        quantity: "4",
+        description: "Test2",
+        tax: 21,
+        price: 10.45,
+      },
+    ];
+    const bottomNotice = "Please visit again. Thank you.";
+    PDFInvoice(
+      logo,
+      senderDetails,
+      clientDetails,
+      invoiceNumber,
+      invoiceDate,
+      products,
+      bottomNotice
+    );
+  };
   return (
     <div className="checkout-page-wrapper">
       <div className="order-summary-wrapper">Order Summary</div>
@@ -61,7 +111,12 @@ const Checkout = () => {
                   <div className="font-weight-bold">Rs. 111.52</div>
                 </div>
                 <div>
-                  <Button className="checkout-proceed-button">PROCEED</Button>
+                  <Button
+                    className="checkout-proceed-button"
+                    onClick={invoiceGenerator}
+                  >
+                    DOWNLOAD INVOICE
+                  </Button>
                 </div>
               </div>
             </Card.Body>

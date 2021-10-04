@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Accordion,
   Form,
@@ -13,11 +13,20 @@ import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import Loader from "../../components/Loader/Loader";
 import EmptyState from "../../components/EmptyState/EmptyState";
+import { getSearchedData } from "../../features/search/searchSlice";
 
 const SORT_BY_MENUS = [
   { label: "Relevance", value: "relevance" },
   { label: "Price: Low to High", value: "lowToHigh" },
   { label: "Price: High to Low", value: "highToLow" },
+];
+
+const BRANDS_FILTER = [
+  { label: "StayHappi", value: "StayHappi" },
+  { label: "Dolo", value: "Dolo" },
+  { label: "Crocin", value: "Crocin" },
+  { label: "Alkem", value: "Alkem" },
+  { label: "Metacin", value: "Metacin" },
 ];
 
 const SearchPage = ({ location }) => {
@@ -26,6 +35,13 @@ const SearchPage = ({ location }) => {
   const searchedQuery = params.get("searchedQuery");
   const [show, setShow] = useState(false);
   const [sortBy, setSortBy] = useState("Relevance");
+  const [filters, setFilters] = useState({
+    medicine_brands: [],
+    product_form: [],
+    presecription_required: [],
+    age: [],
+  });
+
   const filteredListingData = useSelector((state) => state.search);
 
   if (filteredListingData.status === "loading") {
@@ -39,7 +55,9 @@ const SearchPage = ({ location }) => {
   if (filteredListingData.status === "success") {
     return (
       <>
-        {filteredListingData?.searchedData?.length ? (
+        {filteredListingData &&
+        filteredListingData.searchedData &&
+        filteredListingData.searchedData.length ? (
           <div className="search-page-wrapper">
             <div className="search-page--left-panel">
               <Accordion flush className="m-b-12">
@@ -64,7 +82,42 @@ const SearchPage = ({ location }) => {
                 <Accordion.Item eventKey="1">
                   <Accordion.Header>Brands</Accordion.Header>
                   <Accordion.Body className="accordion-body">
-                    <Form.Check type="checkbox" label="StayHappi" />
+                    {BRANDS_FILTER.map((item) => (
+                      <Form.Check
+                        type="checkbox"
+                        name={item.value}
+                        onChange={(e) => {
+                          console.log(e.target.checked, "Value");
+                          if (e.target.checked) {
+                            let brandNames = filters.medicine_brands;
+                            brandNames.push(e.target.name);
+                            setFilters({
+                              ...filters,
+                              medicine_brands: brandNames,
+                            });
+                          } else {
+                            if (
+                              filters.medicine_brands.indexOf(e.target.name) !==
+                              -1
+                            ) {
+                              let brandNames = filters.medicine_brands;
+                              brandNames.splice(
+                                filters.medicine_brands.indexOf(e.target.name),
+                                1
+                              );
+
+                              setFilters({
+                                ...filters,
+                                medicine_brands: brandNames,
+                              });
+                            }
+                          }
+                        }}
+                        key={item.value}
+                        label={item.label}
+                        style={{ cursor: "pointer" }}
+                      />
+                    ))}
                   </Accordion.Body>
                 </Accordion.Item>
               </Accordion>
@@ -141,45 +194,49 @@ const SearchPage = ({ location }) => {
                 </div>
               </div>
               <div className="margin-top-12">
-                {filteredListingData?.searchedData.map((item) => (
-                  <Card className="m-b-12">
-                    <Card.Body>
-                      <div className="flex-column">
-                        <div className="flex-content-sb">
-                          <div className="flex-column">
-                            <span className="font-weight-700">
-                              {item?.name}
-                            </span>
-                            {/* <span className="tablets-strip">
+                {filteredListingData &&
+                  filteredListingData.searchedData &&
+                  filteredListingData.searchedData.map((item) => (
+                    <Card className="m-b-12">
+                      <Card.Body>
+                        <div className="flex-column">
+                          <div className="flex-content-sb">
+                            <div className="flex-column">
+                              <span className="font-weight-700">
+                                {item?.name}
+                              </span>
+                              {/* <span className="tablets-strip">
                           strip of 15 tablets
                         </span> */}
-                          </div>
-
-                          <div className="flex-column">
-                            <span>₹{item?.sell_price || 0}</span>
-                          </div>
-                        </div>
-
-                        <div className="search-page--counter-wrapper">
-                          <div className="search-page-wrapper">
-                            <div className="increment-decrement-counter-wrapper">
-                              -
                             </div>
 
-                            <div className="search-page--counter-value">0</div>
-
-                            <div className="increment-decrement-counter-wrapper">
-                              +
+                            <div className="flex-column">
+                              <span>₹{item?.sell_price || 0}</span>
                             </div>
                           </div>
-                          <div className="search-page--add-cart">
-                            ADD TO CART
+
+                          <div className="search-page--counter-wrapper">
+                            <div className="search-page-wrapper">
+                              <div className="increment-decrement-counter-wrapper">
+                                -
+                              </div>
+
+                              <div className="search-page--counter-value">
+                                0
+                              </div>
+
+                              <div className="increment-decrement-counter-wrapper">
+                                +
+                              </div>
+                            </div>
+                            <div className="search-page--add-cart">
+                              ADD TO CART
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </Card.Body>
-                  </Card>
-                ))}
+                      </Card.Body>
+                    </Card>
+                  ))}
               </div>
             </div>
             <div className="filter-button">

@@ -23,22 +23,19 @@ const Header = () => {
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
+
     if (params.get("searchedQuery")) {
-      dispatch(getSearchedData({ searchedQuery: params.get("searchedQuery") }));
+      dispatch(getSearchedData(params.toString()));
       setSearchedQuery(params.get("searchedQuery"));
     }
   }, []);
 
   const getFilteredData = async () => {
-    await dispatch(getSearchedData({ searchedQuery: searchedQuery }));
-
-    const params = new URLSearchParams();
     if (searchedQuery) {
-      params.set("searchedQuery", searchedQuery);
+      const params = new URLSearchParams({ searchedQuery: searchedQuery });
+      dispatch(getSearchedData(params));
+      history.push(`/search?${params}`);
     }
-
-    history.push("/search");
-    history.push({ search: params.toString() });
   };
 
   return (
@@ -63,7 +60,6 @@ const Header = () => {
                 className="search-box"
                 onSubmit={(e) => {
                   e.preventDefault();
-                  console.log("qwerty");
                 }}
               >
                 <Form.Control

@@ -10,22 +10,19 @@ const initialState = {
 
 export const getSearchedData = createAsyncThunk(
   "searchSlice/getSearchedData",
-  async (data, thunkAPI) => {
+  async (searchParams, thunkAPI) => {
     let config = {
       headers: {
         Authorization: `Token ${AUTH_TOKEN}`,
       },
-      params: {
-        searchQuery: data.searchedQuery,
-      },
     };
 
     try {
-      const response = await axios.get(`/search`, config);
+      const response = await axios.get(`/search?${searchParams}`, config);
       return response.data;
     } catch (error) {
       return error.message;
-      return thunkAPI.rejectWithValue(error.message);
+      // return thunkAPI.rejectWithValue(error.message);
     }
   }
 );

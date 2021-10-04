@@ -32,7 +32,7 @@ const BRANDS_FILTER = [
 const SearchPage = ({ location }) => {
   const history = useHistory();
   const params = new URLSearchParams(location.search);
-  const searchedQuery = params.get("searchedQuery");
+  const searchedQuery = params.get("searchQuery");
   const [show, setShow] = useState(false);
   const [sortBy, setSortBy] = useState("Relevance");
   const [filters, setFilters] = useState({

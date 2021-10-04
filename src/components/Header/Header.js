@@ -24,15 +24,15 @@ const Header = () => {
   useEffect(() => {
     const params = new URLSearchParams(location.search);
 
-    if (params.get("searchedQuery")) {
+    if (params.get("searchQuery")) {
       dispatch(getSearchedData(params.toString()));
-      setSearchedQuery(params.get("searchedQuery"));
+      setSearchedQuery(params.get("searchQuery"));
     }
   }, []);
 
   const getFilteredData = async () => {
     if (searchedQuery) {
-      const params = new URLSearchParams({ searchedQuery: searchedQuery });
+      const params = new URLSearchParams({ searchQuery: searchedQuery });
       dispatch(getSearchedData(params));
       history.push(`/search?${params}`);
     }

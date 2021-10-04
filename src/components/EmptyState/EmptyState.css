@@ -1,12 +1,10 @@
-.page-error {
+.empty-state-wrapper {
   width: 100%;
-  height: 50vh;
   display: flex;
   padding: 32px;
-  margin: 0 auto;
-  text-align: center;
   border-radius: 8px;
   align-items: center;
+  flex-direction: column;
   justify-content: center;
   background-color: #fff;
 }

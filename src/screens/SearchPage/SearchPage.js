@@ -136,24 +136,9 @@ const SearchPage = ({ location }) => {
       <>
         <div className="search-page-wrapper">
           <div className="search-page--left-panel">
-            <Accordion flush className="m-b-12">
-              <Accordion.Item eventKey="0">
-                <Accordion.Header>
-                  <span className="apply-filter--count">0</span>
-                  Active Filters
-                </Accordion.Header>
-                <Accordion.Body className="accordion-body">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                  Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                  laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-                  irure dolor in reprehenderit in voluptate velit esse cillum
-                  dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                  cupidatat non proident, sunt in culpa qui officia deserunt
-                  mollit anim id est laborum.
-                </Accordion.Body>
-              </Accordion.Item>
-            </Accordion>
+            <div className="m-b-12">
+              <h4>Filters</h4>
+            </div>
             <Accordion flush className="m-b-12">
               <Accordion.Item eventKey="1">
                 <Accordion.Header>Brands</Accordion.Header>
@@ -445,28 +430,45 @@ const SearchPage = ({ location }) => {
             <Modal.Body>
               <div>
                 <Accordion flush className="m-b-12">
-                  <Accordion.Item eventKey="0">
-                    <Accordion.Header>
-                      <span className="apply-filter--count">0</span>
-                      Active Filters
-                    </Accordion.Header>
-                    <Accordion.Body className="accordion-body">
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                      sed do eiusmod tempor incididunt ut labore et dolore magna
-                      aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                      ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                      Duis aute irure dolor in reprehenderit in voluptate velit
-                      esse cillum dolore eu fugiat nulla pariatur. Excepteur
-                      sint occaecat cupidatat non proident, sunt in culpa qui
-                      officia deserunt mollit anim id est laborum.
-                    </Accordion.Body>
-                  </Accordion.Item>
-                </Accordion>
-                <Accordion flush className="m-b-12">
                   <Accordion.Item eventKey="1">
                     <Accordion.Header>Brands</Accordion.Header>
                     <Accordion.Body className="accordion-body">
-                      <Form.Check type="checkbox" label="StayHappi" />
+                      {BRANDS_FILTER.map((item) => (
+                        <Form.Check
+                          type="checkbox"
+                          name={item.value}
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              let brandNames = filters.medicine_brand;
+                              brandNames.push(e.target.name);
+                              setFilters({
+                                ...filters,
+                                medicine_brand: brandNames,
+                              });
+                            } else {
+                              if (
+                                filters.medicine_brand.indexOf(
+                                  e.target.name
+                                ) !== -1
+                              ) {
+                                let brandNames = filters.medicine_brand;
+                                brandNames.splice(
+                                  filters.medicine_brand.indexOf(e.target.name),
+                                  1
+                                );
+
+                                setFilters({
+                                  ...filters,
+                                  medicine_brand: brandNames,
+                                });
+                              }
+                            }
+                          }}
+                          key={item.value}
+                          label={item.label}
+                          style={{ cursor: "pointer" }}
+                        />
+                      ))}
                     </Accordion.Body>
                   </Accordion.Item>
                 </Accordion>
@@ -475,8 +477,41 @@ const SearchPage = ({ location }) => {
                   <Accordion.Item eventKey="1">
                     <Accordion.Header>Product Form</Accordion.Header>
                     <Accordion.Body className="accordion-body">
-                      <Form.Check type="checkbox" label="Drop" />
-                      <Form.Check type="checkbox" label="Injection" />
+                      {PRODUCT_FORM.map((item) => (
+                        <Form.Check
+                          type="checkbox"
+                          name={item.value}
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              let brandNames = filters.product_form;
+                              brandNames.push(e.target.name);
+                              setFilters({
+                                ...filters,
+                                product_form: brandNames,
+                              });
+                            } else {
+                              if (
+                                filters.product_form.indexOf(e.target.name) !==
+                                -1
+                              ) {
+                                let brandNames = filters.product_form;
+                                brandNames.splice(
+                                  filters.product_form.indexOf(e.target.name),
+                                  1
+                                );
+
+                                setFilters({
+                                  ...filters,
+                                  product_form: brandNames,
+                                });
+                              }
+                            }
+                          }}
+                          key={item.value}
+                          label={item.label}
+                          style={{ cursor: "pointer" }}
+                        />
+                      ))}
                     </Accordion.Body>
                   </Accordion.Item>
                 </Accordion>
@@ -485,18 +520,44 @@ const SearchPage = ({ location }) => {
                   <Accordion.Item eventKey="1">
                     <Accordion.Header>Prescription Required</Accordion.Header>
                     <Accordion.Body className="accordion-body">
-                      <Form.Check type="checkbox" label="Required" />
-                      <Form.Check type="checkbox" label="Not Required" />
-                    </Accordion.Body>
-                  </Accordion.Item>
-                </Accordion>
+                      {PRESCRIPTION_REQUIRED.map((item) => (
+                        <Form.Check
+                          type="checkbox"
+                          name={item.value}
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              let brandNames = filters.presecription_required;
+                              brandNames.push(e.target.name);
+                              setFilters({
+                                ...filters,
+                                presecription_required: brandNames,
+                              });
+                            } else {
+                              if (
+                                filters.presecription_required.indexOf(
+                                  e.target.name
+                                ) !== -1
+                              ) {
+                                let brandNames = filters.presecription_required;
+                                brandNames.splice(
+                                  filters.presecription_required.indexOf(
+                                    e.target.name
+                                  ),
+                                  1
+                                );
 
-                <Accordion flush className="m-b-12">
-                  <Accordion.Item eventKey="1">
-                    <Accordion.Header>Usage</Accordion.Header>
-                    <Accordion.Body className="accordion-body">
-                      <Form.Check type="checkbox" label="Fever" />
-                      <Form.Check type="checkbox" label="Cough & Cold" />
+                                setFilters({
+                                  ...filters,
+                                  presecription_required: brandNames,
+                                });
+                              }
+                            }
+                          }}
+                          key={item.value}
+                          label={item.label}
+                          style={{ cursor: "pointer" }}
+                        />
+                      ))}
                     </Accordion.Body>
                   </Accordion.Item>
                 </Accordion>
@@ -505,14 +566,49 @@ const SearchPage = ({ location }) => {
                   <Accordion.Item eventKey="1">
                     <Accordion.Header>Age</Accordion.Header>
                     <Accordion.Body className="accordion-body">
-                      <Form.Check type="checkbox" label="All" />
-                      <Form.Check type="checkbox" label="Child" />
+                      {AGE.map((item) => (
+                        <Form.Check
+                          type="checkbox"
+                          name={item.value}
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              let brandNames = filters.age;
+                              brandNames.push(e.target.name);
+                              setFilters({
+                                ...filters,
+                                age: brandNames,
+                              });
+                            } else {
+                              if (filters.age.indexOf(e.target.name) !== -1) {
+                                let brandNames = filters.age;
+                                brandNames.splice(
+                                  filters.age.indexOf(e.target.name),
+                                  1
+                                );
+
+                                setFilters({
+                                  ...filters,
+                                  age: brandNames,
+                                });
+                              }
+                            }
+                          }}
+                          key={item.value}
+                          label={item.label}
+                          style={{ cursor: "pointer" }}
+                        />
+                      ))}
                     </Accordion.Body>
                   </Accordion.Item>
                 </Accordion>
+
                 <div className="filter-apply-button">
                   <div className="d-grid gap-2">
-                    <Button size="lg" className="apply-button--wrapper">
+                    <Button
+                      size="lg"
+                      className="apply-button--wrapper"
+                      onClick={() => setShow(false)}
+                    >
                       Apply
                     </Button>
                   </div>

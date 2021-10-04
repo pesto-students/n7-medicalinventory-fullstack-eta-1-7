@@ -62,6 +62,30 @@ const SearchPage = ({ location }) => {
   });
 
   useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const paramsToObject = Object.fromEntries(params.entries());
+
+    const copyFilters = { ...filters };
+
+    copyFilters.medicine_brand =
+      paramsToObject && paramsToObject.medicine_brand
+        ? paramsToObject.medicine_brand.split(",")
+        : [];
+    copyFilters.product_form =
+      paramsToObject && paramsToObject.product_form
+        ? paramsToObject.product_form.split(",")
+        : [];
+    copyFilters.presecription_required =
+      paramsToObject && paramsToObject.presecription_required
+        ? paramsToObject.presecription_required.split(",")
+        : [];
+    copyFilters.age =
+      paramsToObject && paramsToObject.age ? paramsToObject.age.split(",") : [];
+
+    setFilters(copyFilters);
+  }, []);
+
+  useEffect(() => {
     let sortData = {};
     if (sortBy === "Price: Low to High") {
       sortData.asc = true;
@@ -147,6 +171,9 @@ const SearchPage = ({ location }) => {
                     <Form.Check
                       type="checkbox"
                       name={item.value}
+                      checked={
+                        filters.medicine_brand.indexOf(item.value) !== -1
+                      }
                       onChange={(e) => {
                         if (e.target.checked) {
                           let brandNames = filters.medicine_brand;
@@ -189,6 +216,7 @@ const SearchPage = ({ location }) => {
                     <Form.Check
                       type="checkbox"
                       name={item.value}
+                      checked={filters.product_form.indexOf(item.value) !== -1}
                       onChange={(e) => {
                         if (e.target.checked) {
                           let brandNames = filters.product_form;
@@ -231,6 +259,10 @@ const SearchPage = ({ location }) => {
                     <Form.Check
                       type="checkbox"
                       name={item.value}
+                      checked={
+                        filters.presecription_required.indexOf(item.value) !==
+                        -1
+                      }
                       onChange={(e) => {
                         if (e.target.checked) {
                           let brandNames = filters.presecription_required;
@@ -287,6 +319,7 @@ const SearchPage = ({ location }) => {
                     <Form.Check
                       type="checkbox"
                       name={item.value}
+                      checked={filters.age.indexOf(item.value) !== -1}
                       onChange={(e) => {
                         if (e.target.checked) {
                           let brandNames = filters.age;
@@ -437,6 +470,9 @@ const SearchPage = ({ location }) => {
                         <Form.Check
                           type="checkbox"
                           name={item.value}
+                          checked={
+                            filters.medicine_brand.indexOf(item.value) !== -1
+                          }
                           onChange={(e) => {
                             if (e.target.checked) {
                               let brandNames = filters.medicine_brand;
@@ -481,6 +517,9 @@ const SearchPage = ({ location }) => {
                         <Form.Check
                           type="checkbox"
                           name={item.value}
+                          checked={
+                            filters.product_form.indexOf(item.value) !== -1
+                          }
                           onChange={(e) => {
                             if (e.target.checked) {
                               let brandNames = filters.product_form;
@@ -524,6 +563,11 @@ const SearchPage = ({ location }) => {
                         <Form.Check
                           type="checkbox"
                           name={item.value}
+                          checked={
+                            filters.presecription_required.indexOf(
+                              item.value
+                            ) !== -1
+                          }
                           onChange={(e) => {
                             if (e.target.checked) {
                               let brandNames = filters.presecription_required;
@@ -570,6 +614,7 @@ const SearchPage = ({ location }) => {
                         <Form.Check
                           type="checkbox"
                           name={item.value}
+                          checked={filters.age.indexOf(item.value) !== -1}
                           onChange={(e) => {
                             if (e.target.checked) {
                               let brandNames = filters.age;

@@ -2,9 +2,9 @@ import React from "react";
 import { Spinner } from "react-bootstrap";
 import "./Loader.css";
 
-const Loader = () => {
+const Loader = ({ inline }) => {
   return (
-    <div className="loader-wrapper">
+    <div className={`${inline ? "inline-loader-wrapper" : "loader-wrapper"}`}>
       <Spinner animation="border" />
     </div>
   );

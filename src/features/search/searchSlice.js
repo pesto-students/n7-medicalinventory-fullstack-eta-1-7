@@ -31,9 +31,9 @@ const searchSlice = createSlice({
   name: "searchSlice",
   initialState: initialState,
   extraReducers: {
-    // [getSearchedData.pending]: (state, action) => {
-    //   state.status = "loading";
-    // },
+    [getSearchedData.pending]: (state, action) => {
+      state.status = "loading";
+    },
     [getSearchedData.fulfilled]: (state, { payload }) => {
       state.searchedData = payload;
       state.status = "success";

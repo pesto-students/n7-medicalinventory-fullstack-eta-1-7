@@ -9,11 +9,10 @@ const MedicineForm = () => {
   const validate = Yup.object({
     name: Yup.string().required("Required*"),
     company: Yup.string().required("Required*"),
-    buyerName: Yup.string().required("Required*"),
     manufacture: Yup.string().required("Required*"),
-    qty_in_strip: Yup.string().required("Required*"),
-    in_stock_total: Yup.string().required("Required*"),
-    free_strip: Yup.string().required("Required*"),
+    qty_in_strip: Yup.number().required("Required*").positive().integer(),
+    in_stock_total: Yup.number().required("Required*").positive().integer(),
+    free_strip: Yup.number().required("Required*").positive().integer(),
     description: Yup.string().required("Required*"),
     shelf_no: Yup.string().required("Required*"),
     batch_no: Yup.string().required("Required*"),
@@ -29,7 +28,6 @@ const MedicineForm = () => {
       initialValues={{
         name: "",
         company: "",
-        buyerName: "",
         manufacture: "",
         qty_in_strip: "",
         in_stock_total: "",
@@ -70,7 +68,7 @@ const MedicineForm = () => {
                 </Col>
                 <Col md={6}>
                   <TextField
-                    type="text"
+                    type="number"
                     name="qty_in_strip"
                     label="Quantity In Strip"
                   />
@@ -80,13 +78,17 @@ const MedicineForm = () => {
               <Row>
                 <Col md={6}>
                   <TextField
-                    type="text"
+                    type="number"
                     name="in_stock_total"
                     label="In Stock Total"
                   />
                 </Col>
                 <Col md={6}>
-                  <TextField type="text" name="free_strip" label="Free Strip" />
+                  <TextField
+                    type="number"
+                    name="free_strip"
+                    label="Free Strip"
+                  />
                 </Col>
               </Row>
 

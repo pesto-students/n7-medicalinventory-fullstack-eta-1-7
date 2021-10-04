@@ -24,6 +24,7 @@ const Header = () => {
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     if (params.get("searchedQuery")) {
+      dispatch(getSearchedData({ searchedQuery: params.get("searchedQuery") }));
       setSearchedQuery(params.get("searchedQuery"));
     }
   }, []);
@@ -36,6 +37,7 @@ const Header = () => {
       params.set("searchedQuery", searchedQuery);
     }
 
+    history.push("/search");
     history.push({ search: params.toString() });
   };
 

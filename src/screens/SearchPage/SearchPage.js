@@ -9,7 +9,7 @@ import {
 } from "react-bootstrap";
 import { FunnelFill } from "react-bootstrap-icons";
 import "./SearchPage.css";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import Loader from "../../components/Loader/Loader";
 import EmptyState from "../../components/EmptyState/EmptyState";
@@ -29,8 +29,27 @@ const BRANDS_FILTER = [
   { label: "Metacin", value: "Metacin" },
 ];
 
+const PRODUCT_FORM = [
+  { label: "Tablet", value: "Tablet" },
+  { label: "Syrup", value: "Syrup" },
+  { label: "Drop", value: "Drop" },
+  { label: "Injection", value: "Injection" },
+  { label: "Capsule", value: "Capsule" },
+];
+
+const PRESCRIPTION_REQUIRED = [
+  { label: "Required", value: "true" },
+  { label: "Not Required", value: "false" },
+];
+
+const AGE = [
+  { label: "All", value: "All" },
+  { label: "Child", value: "Child" },
+];
+
 const SearchPage = ({ location }) => {
   const history = useHistory();
+  const dispatch = useDispatch();
   const params = new URLSearchParams(location.search);
   const searchedQuery = params.get("searchQuery");
   const [show, setShow] = useState(false);
@@ -42,10 +61,69 @@ const SearchPage = ({ location }) => {
     age: [],
   });
 
+  useEffect(() => {
+    let sortData = {};
+    if (sortBy === "Price: Low to High") {
+      sortData.asc = true;
+    } else if (sortBy === "Price: High to Low") {
+      sortData.asc = false;
+    } else {
+      delete sortData.asc;
+    }
+
+    if (Object.keys(sortData).length === 0) {
+      const params = new URLSearchParams(location.search);
+      if (params.get("asc")) {
+        params.delete("asc");
+      }
+      dispatch(getSearchedData(params));
+      history.push(`/search?${params}`);
+    } else {
+      const params = new URLSearchParams(location.search);
+      if (params.get("asc")) {
+        params.delete("asc");
+      }
+      params.append("asc", sortData.asc);
+
+      dispatch(getSearchedData(params));
+      history.push(`/search?${params}`);
+    }
+  }, [sortBy]);
+
+  useEffect(() => {
+    if (
+      filters.medicine_brands.length > 0 ||
+      filters.product_form.length > 0 ||
+      filters.presecription_required > 0 ||
+      filters.age.length > 0
+    ) {
+      const params = new URLSearchParams(location.search);
+      let updatedFilters = { ...filters };
+
+      updatedFilters.medicine_brands =
+        updatedFilters.medicine_brands.toString();
+      updatedFilters.product_form = updatedFilters.product_form.toString();
+      updatedFilters.presecription_required =
+        updatedFilters.presecription_required.toString();
+      updatedFilters.age = updatedFilters.age.toString();
+
+      const paramsAfterFilter = new URLSearchParams(updatedFilters);
+
+      Object.keys(updatedFilters).forEach((key) => {
+        if (updatedFilters[key]) {
+          params.append(key, updatedFilters[key]);
+        }
+      });
+
+      dispatch(getSearchedData(params));
+      history.push(`/search?${params}`);
+    }
+  }, [filters]);
+
   const filteredListingData = useSelector((state) => state.search);
 
   if (filteredListingData.status === "loading") {
-    return <Loader />;
+    return null;
   }
 
   if (filteredListingData.status === "failed") {
@@ -87,7 +165,6 @@ const SearchPage = ({ location }) => {
                         type="checkbox"
                         name={item.value}
                         onChange={(e) => {
-                          console.log(e.target.checked, "Value");
                           if (e.target.checked) {
                             let brandNames = filters.medicine_brands;
                             brandNames.push(e.target.name);
@@ -126,8 +203,40 @@ const SearchPage = ({ location }) => {
                 <Accordion.Item eventKey="1">
                   <Accordion.Header>Product Form</Accordion.Header>
                   <Accordion.Body className="accordion-body">
-                    <Form.Check type="checkbox" label="Drop" />
-                    <Form.Check type="checkbox" label="Injection" />
+                    {PRODUCT_FORM.map((item) => (
+                      <Form.Check
+                        type="checkbox"
+                        name={item.value}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            let brandNames = filters.product_form;
+                            brandNames.push(e.target.name);
+                            setFilters({
+                              ...filters,
+                              product_form: brandNames,
+                            });
+                          } else {
+                            if (
+                              filters.product_form.indexOf(e.target.name) !== -1
+                            ) {
+                              let brandNames = filters.product_form;
+                              brandNames.splice(
+                                filters.product_form.indexOf(e.target.name),
+                                1
+                              );
+
+                              setFilters({
+                                ...filters,
+                                product_form: brandNames,
+                              });
+                            }
+                          }
+                        }}
+                        key={item.value}
+                        label={item.label}
+                        style={{ cursor: "pointer" }}
+                      />
+                    ))}
                   </Accordion.Body>
                 </Accordion.Item>
               </Accordion>
@@ -136,13 +245,49 @@ const SearchPage = ({ location }) => {
                 <Accordion.Item eventKey="1">
                   <Accordion.Header>Prescription Required</Accordion.Header>
                   <Accordion.Body className="accordion-body">
-                    <Form.Check type="checkbox" label="Required" />
-                    <Form.Check type="checkbox" label="Not Required" />
+                    {PRESCRIPTION_REQUIRED.map((item) => (
+                      <Form.Check
+                        type="checkbox"
+                        name={item.value}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            let brandNames = filters.presecription_required;
+                            brandNames.push(e.target.name);
+                            setFilters({
+                              ...filters,
+                              presecription_required: brandNames,
+                            });
+                          } else {
+                            if (
+                              filters.presecription_required.indexOf(
+                                e.target.name
+                              ) !== -1
+                            ) {
+                              let brandNames = filters.presecription_required;
+                              brandNames.splice(
+                                filters.presecription_required.indexOf(
+                                  e.target.name
+                                ),
+                                1
+                              );
+
+                              setFilters({
+                                ...filters,
+                                presecription_required: brandNames,
+                              });
+                            }
+                          }
+                        }}
+                        key={item.value}
+                        label={item.label}
+                        style={{ cursor: "pointer" }}
+                      />
+                    ))}
                   </Accordion.Body>
                 </Accordion.Item>
               </Accordion>
 
-              <Accordion flush className="m-b-12">
+              {/* <Accordion flush className="m-b-12">
                 <Accordion.Item eventKey="1">
                   <Accordion.Header>Usage</Accordion.Header>
                   <Accordion.Body className="accordion-body">
@@ -150,14 +295,44 @@ const SearchPage = ({ location }) => {
                     <Form.Check type="checkbox" label="Cough & Cold" />
                   </Accordion.Body>
                 </Accordion.Item>
-              </Accordion>
+              </Accordion> */}
 
               <Accordion flush className="m-b-12">
                 <Accordion.Item eventKey="1">
                   <Accordion.Header>Age</Accordion.Header>
                   <Accordion.Body className="accordion-body">
-                    <Form.Check type="checkbox" label="All" />
-                    <Form.Check type="checkbox" label="Child" />
+                    {AGE.map((item) => (
+                      <Form.Check
+                        type="checkbox"
+                        name={item.value}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            let brandNames = filters.age;
+                            brandNames.push(e.target.name);
+                            setFilters({
+                              ...filters,
+                              age: brandNames,
+                            });
+                          } else {
+                            if (filters.age.indexOf(e.target.name) !== -1) {
+                              let brandNames = filters.age;
+                              brandNames.splice(
+                                filters.age.indexOf(e.target.name),
+                                1
+                              );
+
+                              setFilters({
+                                ...filters,
+                                age: brandNames,
+                              });
+                            }
+                          }
+                        }}
+                        key={item.value}
+                        label={item.label}
+                        style={{ cursor: "pointer" }}
+                      />
+                    ))}
                   </Accordion.Body>
                 </Accordion.Item>
               </Accordion>
@@ -197,7 +372,7 @@ const SearchPage = ({ location }) => {
                 {filteredListingData &&
                   filteredListingData.searchedData &&
                   filteredListingData.searchedData.map((item) => (
-                    <Card className="m-b-12">
+                    <Card className="m-b-12" key={item.id}>
                       <Card.Body>
                         <div className="flex-column">
                           <div className="flex-content-sb">

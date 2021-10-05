@@ -129,8 +129,6 @@ const SearchPage = ({ location }) => {
         updatedFilters.presecription_required.toString();
       updatedFilters.age = updatedFilters.age.toString();
 
-      const paramsAfterFilter = new URLSearchParams(updatedFilters);
-
       Object.keys(updatedFilters).forEach((key) => {
         if (updatedFilters[key]) {
           if (params.get(key)) {
@@ -144,6 +142,24 @@ const SearchPage = ({ location }) => {
       history.push(`/search?${params}`);
     }
   }, [filters]);
+
+  const clearFilter = () => {
+    const params = new URLSearchParams(location.search);
+
+    params.delete("medicine_brand");
+    params.delete("product_form");
+    params.delete("presecription_required");
+    params.delete("age");
+
+    dispatch(getSearchedData(params));
+    history.push(`/search?${params}`);
+    setFilters({
+      medicine_brand: [],
+      product_form: [],
+      presecription_required: [],
+      age: [],
+    });
+  };
 
   const filteredListingData = useSelector((state) => state.search);
 
@@ -159,8 +175,11 @@ const SearchPage = ({ location }) => {
       <>
         <div className="search-page-wrapper">
           <div className="search-page--left-panel">
-            <div className="m-b-12">
+            <div className="m-b-12 clear-filter-wrapper">
               <h4>Filters</h4>
+              <span className="clear-filter" onClick={() => clearFilter()}>
+                Clear Filters
+              </span>
             </div>
             <Accordion flush className="m-b-12">
               <Accordion.Item eventKey="1">

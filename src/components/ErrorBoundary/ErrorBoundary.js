@@ -1,6 +1,7 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
-
+import { PatchExclamation } from "react-bootstrap-icons";
+import "./ErrorBoundary.css";
 class ErrorView extends React.Component {
   constructor(props) {
     super(props);
@@ -22,6 +23,9 @@ class ErrorView extends React.Component {
       return (
         <article className="page-error">
           <section>
+            <p>
+              <PatchExclamation size={50} />
+            </p>
             <h4>We’re sorry</h4>
             <p>
               Something went wrong with your request. Please try again later or

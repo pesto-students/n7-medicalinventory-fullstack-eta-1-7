@@ -1,0 +1,10 @@
+.empty-state-wrapper {
+  width: 100%;
+  display: flex;
+  padding: 32px;
+  border-radius: 8px;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  background-color: #fff;
+}

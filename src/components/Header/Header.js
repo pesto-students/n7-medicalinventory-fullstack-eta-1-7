@@ -20,14 +20,24 @@ const Header = () => {
   const history = useHistory();
   const location = useLocation();
   const [searchedQuery, setSearchedQuery] = useState("");
+  const [isHeaderExpanded, setIsHeaderExpanded] = useState(false);
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+
+    if (params.get("searchQuery")) {
+      dispatch(getSearchedData(params.toString()));
+      setSearchedQuery(params.get("searchQuery"));
+    }
+  }, []);
 
   const getFilteredData = async () => {
-    await dispatch(getSearchedData({ searchedQuery: searchedQuery }));
-
-    history.push({
-      pathname: `/search`,
-      search: `?searchedQuery=${searchedQuery}`,
-    });
+    if (searchedQuery) {
+      const params = new URLSearchParams({ searchQuery: searchedQuery });
+      dispatch(getSearchedData(params));
+      history.push(`/search?${params}`);
+    }
+    setIsHeaderExpanded(false);
   };
 
   return (
@@ -39,6 +49,10 @@ const Header = () => {
         fixed="top"
         variant="dark"
         className="header-wrapper"
+        expanded={isHeaderExpanded}
+        onToggle={(value) => {
+          setIsHeaderExpanded(value);
+        }}
       >
         <Container fluid>
           <Navbar.Brand href="#home">Medical Inventory</Navbar.Brand>
@@ -52,7 +66,6 @@ const Header = () => {
                 className="search-box"
                 onSubmit={(e) => {
                   e.preventDefault();
-                  console.log("qwerty");
                 }}
               >
                 <Form.Control
@@ -131,15 +144,15 @@ const Header = () => {
               </div>
             </Nav>
             <Nav className="nav-bar--small-screen">
-              <div className="nav-bar-icons--responsive">
+              <div
+                className="nav-bar-icons--responsive"
+                onClick={() => {
+                  history.push("/checkout");
+                  setIsHeaderExpanded(false);
+                }}
+              >
                 <span>
-                  <CartFill
-                    size={30}
-                    color="#28b8b0"
-                    onClick={() => {
-                      history.push("/checkout");
-                    }}
-                  />
+                  <CartFill size={30} color="#28b8b0" />
                 </span>
                 &nbsp; Go To Cart
               </div>

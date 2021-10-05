@@ -63,6 +63,15 @@ const SearchPage = ({ location }) => {
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
+
+    if (params.get("asc")) {
+      if (params.get("asc") === "true") {
+        setSortBy("Price: Low to High");
+      } else {
+        setSortBy("Price: High to Low");
+      }
+    }
+
     const paramsToObject = Object.fromEntries(params.entries());
 
     const copyFilters = { ...filters };
@@ -86,29 +95,19 @@ const SearchPage = ({ location }) => {
   }, []);
 
   useEffect(() => {
-    let sortData = {};
-    if (sortBy === "Price: Low to High") {
-      sortData.asc = true;
-    } else if (sortBy === "Price: High to Low") {
-      sortData.asc = false;
-    } else {
-      delete sortData.asc;
-    }
+    const params = new URLSearchParams(location.search);
 
-    if (Object.keys(sortData).length === 0) {
-      const params = new URLSearchParams(location.search);
+    if (sortBy !== "Relevance") {
       if (params.get("asc")) {
         params.delete("asc");
       }
+      params.append("asc", sortBy === "Price: Low to High" ? "true" : "false");
       dispatch(getSearchedData(params));
       history.push(`/search?${params}`);
     } else {
-      const params = new URLSearchParams(location.search);
       if (params.get("asc")) {
         params.delete("asc");
       }
-      params.append("asc", sortData.asc);
-
       dispatch(getSearchedData(params));
       history.push(`/search?${params}`);
     }

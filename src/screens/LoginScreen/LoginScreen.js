@@ -15,14 +15,23 @@ function LoginScreen() {
     const handleSubmit = async () => {
         if (name.trim().length > 0 && password.trim().length > 0){
             try {
-                console.log(name,password)
-                const response = await axios.post('/api-token-auth/',{username:name,password:password})
-                dispatch(log())
+                console.log({username:name,password:password})
+                const response = await axios.post('/api-token-auth/',{},{
+                    headers: {
+                        'Content-Type': 'application/json',
+                        
+                    },
+                    auth: {
+                        username: name,
+                        password: password
+                      }
+                  })
+                dispatch(log(response.data.isAdmin))
                 ls.set('token', response.data.token)
                 history.replace('/')
             } 
               catch (error) {
-                  console.log(error.message)
+                  console.log(error)
                   alert("Authentication denied")
 
               }

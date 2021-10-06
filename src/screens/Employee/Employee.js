@@ -8,6 +8,7 @@ import { useHistory } from 'react-router'
 import ls from 'local-storage'
 import { Container, Row, Col, Button } from "react-bootstrap";
 import TextField from "../../components/TextField/TextField";
+import { toast } from "../../components/Toast/Toast";
 function Employee() {
     const history = useHistory()
     const handleSubmit = async (values) => {
@@ -24,7 +25,7 @@ function Employee() {
             } 
               catch (error) {
                   console.log(error)
-                  alert("Authentication denied")
+                  toast.error("Authentication denied")
 
               }
     }
@@ -46,7 +47,7 @@ function Employee() {
                     'Authorization': `Token ${ls.get('token')}`  
                 }})
                 if(response.data.exists){
-                    alert("Username exists")
+                  toast.error("Username exists")
                 }
             } 
               catch (error) {
@@ -152,8 +153,8 @@ function Employee() {
             )}
             </Formik>
             </div>
-        </div>
-    )
+        </div>               
+  );
 }
 
-export default Employee
+export default Employee;

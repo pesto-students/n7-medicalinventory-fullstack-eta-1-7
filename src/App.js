@@ -14,11 +14,12 @@ import {
 import Landing from "./screens/LoginScreen/Landing";
 import Employee from "./screens/Employee/Employee";
 import Header from "./components/Header/Header";
-import ErrorBoundry from "./components/ErrorBoundary";
+import ErrorBoundry from "./components/ErrorBoundary/ErrorBoundary";
 import { AUTH_TOKEN } from "./localStorage";
+import Loader from "./components/Loader/Loader";
 import axios from './axios'
+import { useHistory } from "react-router";
 import ls from 'local-storage'
-import { useHistory } from 'react-router'
 const Checkout = React.lazy(() =>
   import(/* webpackChunkName: 'checkout' */ "./screens/Checkout/Checkout")
 );
@@ -73,7 +74,7 @@ function App() {
           <>
             <Header />
             <div className="app-wrapper">
-              <React.Suspense fallback="Loading...">
+              <React.Suspense fallback={<Loader />}>
                 <ErrorBoundry>
                   <Switch>
                     <Route

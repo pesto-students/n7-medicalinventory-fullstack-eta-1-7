@@ -10,47 +10,39 @@ const initialState = {
 
 export const getSearchedData = createAsyncThunk(
   "searchSlice/getSearchedData",
-  async (data, thunkAPI) => {
+  async (searchParams, thunkAPI) => {
     let config = {
       headers: {
         Authorization: `Token ${AUTH_TOKEN}`,
       },
-      params: {
-        searchQuery: data.searchedQuery,
-      },
     };
 
-    await axios
-      .get(`/search`, config)
-      .then((response) => {
-        return response.data.data;
-      })
-      .catch((error) => {
-        return thunkAPI.rejectWithValue(error.message);
-      });
+    try {
+      const response = await axios.get(`/search?${searchParams}`, config);
+      return response.data;
+    } catch (error) {
+      return error.message;
+      // return thunkAPI.rejectWithValue(error.message);
+    }
   }
 );
 
 const searchSlice = createSlice({
   name: "searchSlice",
   initialState: initialState,
-  extraReducers: (builder) => {
-    builder
-      .addCase(getSearchedData.pending, (state) => {
-        state.status = "loading";
-      })
-      .addCase(getSearchedData.fulfilled, (state, { payload }) => {
-        state.status = "idle";
-        console.log(payload);
-        state.searchedData = payload;
-        state.error = "";
-      })
-      .addCase(getSearchedData.rejected, (state, { payload }) => {
-        state.status = "error";
-        state.error = payload;
-      });
+  extraReducers: {
+    [getSearchedData.pending]: (state, action) => {
+      state.status = "loading";
+    },
+    [getSearchedData.fulfilled]: (state, { payload }) => {
+      state.searchedData = payload;
+      state.status = "success";
+    },
+    [getSearchedData.rejected]: (state, { payload }) => {
+      state.error = payload;
+      state.status = "failed";
+    },
   },
 });
 
-// export const { search } = searchSlice.actions;
 export default searchSlice.reducer;

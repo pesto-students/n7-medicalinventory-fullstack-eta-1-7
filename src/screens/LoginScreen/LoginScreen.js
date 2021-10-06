@@ -1,47 +1,45 @@
-import React,{useState} from 'react'
-import {useDispatch,useSelector} from 'react-redux'
-import axios from '../../axios'
-import ls from 'local-storage'
-
-import './Login.css'
-import { log } from '../../features/login/loginSlice';
-import { useHistory } from 'react-router'
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "../../axios";
+import "./Login.css";
+import { log } from "../../features/login/loginSlice";
+import { useHistory } from "react-router";
+import { setAuthToken } from "../../localStorage";
+import { toast } from "../../components/Toast/Toast";
 
 function LoginScreen() {
-    const [name, setName] = useState('')
-    const [password, setPassword] = useState('')
-    const dispatch = useDispatch()
-    const history = useHistory()
-    const handleSubmit = async () => {
-        if (name.trim().length > 0 && password.trim().length > 0){
-            try {
-                console.log({username:name,password:password})
-                const response = await axios.post('/api-token-auth/',{},{
-                    headers: {
-                        'Content-Type': 'application/json',
-                        
-                    },
-                    auth: {
-                        username: name,
-                        password: password
-                      }
-                  })
-                dispatch(log(response.data.isAdmin))
-                ls.set('token', response.data.token)
-                history.replace('/')
-            } 
-              catch (error) {
-                  console.log(error)
-                  alert("Authentication denied")
-
-              }
-        }
-        else{
-            alert("no Data")
-        }
-        
-        
-    }
+  const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const handleSubmit = async () => {
+    if (name.trim().length > 0 && password.trim().length > 0) {
+      try {
+        console.log(name, password);
+        const response = await axios.post(
+          "/api-token-auth/",
+          {},
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+            auth: {
+              username: name,
+              password: password,
+            },
+          }
+        );
+        dispatch(log(response.data.isAdmin));
+        setAuthToken("token", response.data.token);
+        setAuthToken("isAdmin", response.data.isAdmin ? "true" : "false");
+        history.replace("/");
+      } catch (error) {
+        console.log(error.message);
+        toast.error("Authentication denied");
+      }
+    } else {
+      toast.error("no Data");
+    }}
     return (
         <div className="main">
         <div className="container">

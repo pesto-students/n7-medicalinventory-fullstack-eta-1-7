@@ -1,13 +1,14 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "../../axios";
 import { setAuthToken } from "../../localStorage";
+import { toast } from "../../components/Toast/Toast";
 
 const initialState = {
   value: 0,
-  loggedIn:false,
-  status: 'idle',
-  isAdmin:false,
-  error:''
+  loggedIn: false,
+  status: "idle",
+  isAdmin: false,
+  error: "",
 };
 
 export const createTokenAsync = createAsyncThunk(
@@ -20,7 +21,7 @@ export const createTokenAsync = createAsyncThunk(
       setAuthToken("token", response.data.token);
       return response.data.token;
     } catch (error) {
-      alert("Authentication denied");
+      toast.error("Authentication denied");
       return thunkAPI.rejectWithValue(error.message);
     }
   }
@@ -36,8 +37,9 @@ export const loginSlice = createSlice({
     },
     log: (state,action) => {
       state.loggedIn = true;
-      state.isAdmin = action.payload
-    }},
+      state.isAdmin = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(createTokenAsync.pending, (state) => {

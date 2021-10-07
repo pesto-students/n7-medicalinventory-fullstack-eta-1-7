@@ -9,8 +9,11 @@ import ls from 'local-storage'
 import { Container, Row, Col, Button } from "react-bootstrap";
 import TextField from "../../components/TextField/TextField";
 import { toast } from "../../components/Toast/Toast";
+import { instanceShop } from '../../features/shop/shopSlice';
 function Employee() {
     const history = useHistory()
+    const shop_id = useSelector(instanceShop)
+    console.log(shop_id)
     const handleSubmit = async (values) => {
 
         console.log(values)
@@ -60,17 +63,17 @@ function Employee() {
         
     }
     return (
-        <div className="employee__main">
-            <div className="employee__container">
-            <h1>Register Employee</h1>
+
+            
             <Formik
             validationSchema={validate}
-            initialValues={{ email: '', password: '' ,first_name:'',username:'',date_joined:'',phone:''}}
+            initialValues={{ email: '', password: '' ,first_name:'',username:'',date_joined:'',phone:'',company:shop_id}}
             onSubmit={handleSubmit}
             >
             {(formik) => (
                 
                 <div>
+                  <h1>Register Employee</h1>
                 <Form>
                   <Container>
                     <Row>
@@ -152,8 +155,7 @@ function Employee() {
               </div>
             )}
             </Formik>
-            </div>
-        </div>               
+            
   );
 }
 

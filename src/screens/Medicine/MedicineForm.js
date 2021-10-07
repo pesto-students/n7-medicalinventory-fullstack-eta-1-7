@@ -3,9 +3,35 @@ import { Container, Row, Col, Button } from "react-bootstrap";
 import TextField from "../../components/TextField/TextField";
 import * as Yup from "yup";
 import { Formik, Form } from "formik";
-import axios from "axios";
-
+import axios from '../../axios'
+import {useDispatch,useSelector} from 'react-redux'
+import { instanceShop } from "../../features/shop/shopSlice";
+import ls from 'local-storage'
+import { toast } from "../../components/Toast/Toast";
+import { useHistory } from 'react-router'
 const MedicineForm = () => {
+  const history =  useHistory()
+  const shop_id = useSelector(instanceShop)
+  const handleSubmit = async (values) => {
+
+    
+    console.log(values)
+        try {
+            const response = await axios.post('/api/medicine/',values, {headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Token ${ls.get('token')}` 
+                
+            }})
+            console.log(response)
+            history.replace('/')
+        } 
+          catch (error) {
+              console.log(error)
+              toast.error("Authentication denied")
+
+          }
+}
+
   const validate = Yup.object({
     name: Yup.string().required("Required*"),
     company: Yup.string().required("Required*"),
@@ -18,8 +44,8 @@ const MedicineForm = () => {
     batch_no: Yup.string().required("Required*"),
     s_gst: Yup.string().required("Required*"),
     c_gst: Yup.string().required("Required*"),
-    sell_price: Yup.string().required("Required*"),
-    buy_price: Yup.string().required("Required*"),
+    sell_price: Yup.number().required("Required*").positive().integer(),
+    buy_price: Yup.number().required("Required*").positive().integer(),
     medicine_tags: Yup.string().required("Required*"),
   });
   return (
@@ -27,7 +53,7 @@ const MedicineForm = () => {
       validationSchema={validate}
       initialValues={{
         name: "",
-        company: "",
+        company: shop_id,
         manufacture: "",
         qty_in_strip: "",
         in_stock_total: "",
@@ -39,10 +65,10 @@ const MedicineForm = () => {
         c_gst: "",
         sell_price: "",
         buy_price: "",
-        medicine_tags: "",
+        // medicine_tags: "",
       }}
       onSubmit={(values) => {
-        console.log(values);
+        handleSubmit(values)
       }}
     >
       {(formik) => (
@@ -54,7 +80,7 @@ const MedicineForm = () => {
                   <TextField label="Medicine Name" name="name" type="text" />
                 </Col>
                 <Col md={6}>
-                  <TextField label="Company Name" name="company" type="text" />
+                  <TextField label="Company Name" name="company" value={shop_id}  disabled type="text" />
                 </Col>
               </Row>
 
@@ -119,13 +145,13 @@ const MedicineForm = () => {
                   <TextField type="text" name="c_gst" label="CGST" />
                 </Col>
                 <Col md={6}>
-                  <TextField type="text" name="sell_price" label="Sell Price" />
+                  <TextField type="number" name="sell_price" label="Sell Price" />
                 </Col>
               </Row>
 
               <Row>
                 <Col md={6}>
-                  <TextField type="text" name="buy_price" label="Buy Price" />
+                  <TextField type="number" name="buy_price" label="Buy Price" />
                 </Col>
                 <Col md={6}>
                   <TextField

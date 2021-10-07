@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import { Formik, Form } from "formik";
 import axios from "axios";
 
-const MedicineForm = () => {
+const AddMedicineForm = () => {
   const validate = Yup.object({
     name: Yup.string().required("Required*"),
     company: Yup.string().required("Required*"),
@@ -22,6 +22,7 @@ const MedicineForm = () => {
     buy_price: Yup.string().required("Required*"),
     medicine_tags: Yup.string().required("Required*"),
   });
+
   return (
     <Formik
       validationSchema={validate}
@@ -160,4 +161,4 @@ const MedicineForm = () => {
   );
 };
 
-export default MedicineForm;
+export default AddMedicineForm;

@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   createTokenAsync,
   log,
+  logout,
   selectLoggedIn,
   selectUser,
 } from "./features/login/loginSlice";
@@ -16,7 +17,9 @@ import Header from "./components/Header/Header";
 import ErrorBoundry from "./components/ErrorBoundary/ErrorBoundary";
 import { AUTH_TOKEN } from "./localStorage";
 import Loader from "./components/Loader/Loader";
-
+import axios from './axios'
+import { useHistory } from "react-router";
+import ls from 'local-storage'
 const Checkout = React.lazy(() =>
   import(/* webpackChunkName: 'checkout' */ "./screens/Checkout/Checkout")
 );
@@ -29,19 +32,36 @@ const Medicine = React.lazy(() =>
   import(/* webpackChunkName: 'checkout' */ "./screens/Medicine/Medicine")
 );
 
+
+
 function App() {
   const loggedIn = useSelector(selectLoggedIn);
   const dispatch = useDispatch();
-
+  const history = useHistory();
   console.log(loggedIn);
-  const user = AUTH_TOKEN;
   const shops = useSelector((state) => state.shop.shops);
+  const checkTokenValidation = async () => {
+    try {
+        const response = await axios.post('/api-token-auth/',{},{
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Token ${ls.get('token')}`
+            },
+          })
+        dispatch(log(response.data.isAdmin))
+        
+    } 
+      catch (error) {
+        dispatch(logout())
 
+      }
+
+}
   useEffect(() => {
     const token = AUTH_TOKEN;
     console.log(token);
     if (token) {
-      dispatch(log());
+      checkTokenValidation()
     }
   }, []);
 

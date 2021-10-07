@@ -5,7 +5,8 @@ import "./Checkout.css";
 
 const Checkout = () => {
   const invoiceGenerator = () => {
-    const logo = "https://public.easyinvoice.cloud/img/logo_en_original.png";
+    const logo =
+      "https://www.logomoose.com/wp-content/uploads/2013/08/ms_moose.jpg";
     const senderDetails = {
       company: "Sample Corp",
       address: "Sample Street 123",
@@ -53,6 +54,7 @@ const Checkout = () => {
       bottomNotice
     );
   };
+
   return (
     <div className="checkout-page-wrapper">
       <div className="order-summary-wrapper">Order Summary</div>

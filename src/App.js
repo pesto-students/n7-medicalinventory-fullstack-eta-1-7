@@ -52,10 +52,10 @@ function App() {
           <LoginScreen />
         ) : (
           <>
-            <Header />
-            <div className="app-wrapper">
-              <React.Suspense fallback={<Loader />}>
-                <ErrorBoundry>
+            <React.Suspense fallback={<Loader />}>
+              <ErrorBoundry>
+                <Header />
+                <div className="app-wrapper">
                   <Switch>
                     <Route
                       exact
@@ -67,9 +67,9 @@ function App() {
                     <Route path="/checkout" component={Checkout} />
                     <Route path="/medicine" component={Medicine} />
                   </Switch>
-                </ErrorBoundry>
-              </React.Suspense>
-            </div>
+                </div>
+              </ErrorBoundry>
+            </React.Suspense>
           </>
         )}
       </Router>

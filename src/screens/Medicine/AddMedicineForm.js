@@ -9,7 +9,7 @@ import { instanceShop } from "../../features/shop/shopSlice";
 import ls from 'local-storage'
 import { toast } from "../../components/Toast/Toast";
 import { useHistory } from 'react-router'
-const MedicineForm = () => {
+const AddMedicineForm = () => {
   const history =  useHistory()
   const shop_id = useSelector(instanceShop)
   const handleSubmit = async (values) => {
@@ -48,6 +48,7 @@ const MedicineForm = () => {
     buy_price: Yup.number().required("Required*").positive().integer(),
     medicine_tags: Yup.string().required("Required*"),
   });
+
   return (
     <Formik
       validationSchema={validate}
@@ -186,4 +187,4 @@ const MedicineForm = () => {
   );
 };
 
-export default MedicineForm;
+export default AddMedicineForm;

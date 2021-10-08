@@ -78,9 +78,10 @@ function App() {
           <LoginScreen />
         ) : (
           <>
-            <div className="app-wrapper">
-              <React.Suspense fallback={<Loader />}>
-                <ErrorBoundry>
+            <React.Suspense fallback={<Loader />}>
+              <ErrorBoundry>
+         
+                <div className="app-wrapper">
                   <Switch>
                   
                     <Route
@@ -93,9 +94,9 @@ function App() {
                     <Route path="/checkout" component={Checkout} />
                     <Route path="/medicine" component={Medicine} />
                   </Switch>
-                </ErrorBoundry>
-              </React.Suspense>
-            </div>
+                </div>
+              </ErrorBoundry>
+            </React.Suspense>
           </>
         )}
       </Router>

@@ -13,15 +13,17 @@ const Checkout = () => {
     const currentCartData = JSON.parse(ls.get("cartData"));
     if (currentCartData && currentCartData.length > 0) {
       setCartData(currentCartData);
-
-      let currentTotalAmount = 0;
-      currentCartData.map((item) => {
-        currentTotalAmount += item.count * item.sell_price;
-      });
-
-      setTotalAmount(currentTotalAmount);
     }
   }, []);
+
+  useEffect(() => {
+    let currentTotalAmount = 0;
+    cartData.map((item) => {
+      currentTotalAmount += item.count * item.sell_price;
+    });
+
+    setTotalAmount(currentTotalAmount);
+  }, [cartData]);
 
   const invoiceGenerator = () => {
     const logo =
@@ -74,6 +76,39 @@ const Checkout = () => {
     );
   };
 
+  const decrementCountHandler = async (item) => {
+    let copyData = { ...item };
+    if (copyData.count > 1) {
+      copyData.count = copyData.count - 1;
+      let filteredDdata = cartData.filter(
+        (cartItem) => cartItem.id !== item.id
+      );
+      await filteredDdata.push(copyData);
+      await setCartData(filteredDdata);
+      await ls.remove("cartData");
+      await ls.set("cartData", JSON.stringify(filteredDdata));
+    }
+  };
+
+  const incrementCountHandler = async (item) => {
+    let copyData = { ...item };
+    copyData.count = copyData.count + 1;
+    let filteredDdata = cartData.filter((cartItem) => cartItem.id !== item.id);
+    await filteredDdata.push(copyData);
+    await setCartData(filteredDdata);
+    await ls.remove("cartData");
+    await ls.set("cartData", JSON.stringify(filteredDdata));
+  };
+
+  const removeOrderHandler = async (item) => {
+    let lsData = JSON.parse(ls.get("cartData"));
+    let filteredData = lsData.filter((lsItem) => lsItem.id !== item.id);
+
+    setCartData(filteredData);
+    await ls.remove("cartData");
+    await ls.set("cartData", JSON.stringify(filteredData));
+  };
+
   return (
     <div className="checkout-page-wrapper">
       {cartData && cartData.length > 0 ? (
@@ -101,20 +136,36 @@ const Checkout = () => {
 
                       <div className="checkout-page--counter-wrapper">
                         <div className="checkout-counter--wrapper">
-                          <div className="increment-decrement-counter-wrapper">
+                          <div
+                            className="increment-decrement-counter-wrapper"
+                            onClick={() => {
+                              decrementCountHandler(item);
+                            }}
+                          >
                             -
                           </div>
                           &nbsp;
-                          <div classname="checkout-page--counter-value">
+                          <div className="checkout-page--counter-value">
                             {item.count}
                           </div>
                           &nbsp;
-                          <div className="increment-decrement-counter-wrapper">
+                          <div
+                            className="increment-decrement-counter-wrapper"
+                            onClick={() => {
+                              incrementCountHandler(item);
+                            }}
+                          >
                             +
                           </div>
                         </div>
                         <div>
-                          <Button variant="secondary" size="sm">
+                          <Button
+                            variant="secondary"
+                            size="sm"
+                            onClick={() => {
+                              removeOrderHandler(item);
+                            }}
+                          >
                             Remove
                           </Button>
                         </div>

@@ -60,6 +60,11 @@
   border-bottom: 0.125rem solid #c4c4c4;
 }
 
+section:last-child {
+  margin-bottom: -1rem;
+  border-bottom: none;
+}
+
 .flex-content-sb {
   display: flex;
   justify-content: space-between;
@@ -151,4 +156,8 @@
 .checkout-proceed-button {
   border: none;
   background-color: var(--theme-color);
+}
+
+.empty-state-cart {
+  color: #ff0000;
 }

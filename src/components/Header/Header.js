@@ -109,6 +109,9 @@ const Header = () => {
                   size={30}
                   color="#28b8b0"
                   className="pointer-margin-right-20"
+                  onClick={() => {
+                    history.push("/medicine");
+                  }}
                 />
                 <CartFill
                   size={30}

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Tabs, Tab, Card } from "react-bootstrap";
-import MedicineForm from "./MedicineForm";
+import AddMedicineForm from "./AddMedicineForm";
+import UpdateMedicineForm from "./UpdateMedicineForm";
 import "./Medicine.css";
 
 const Medicine = () => {
@@ -15,10 +16,10 @@ const Medicine = () => {
             className="mb-3"
           >
             <Tab eventKey="addMedicine" title="Add Medicine">
-              <MedicineForm editMode={false} />
+              <AddMedicineForm />
             </Tab>
             <Tab eventKey="updateMedicine" title="Update Medicine">
-              <MedicineForm editMode={true} />
+              <UpdateMedicineForm />
             </Tab>
           </Tabs>
         </Card.Body>

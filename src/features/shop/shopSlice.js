@@ -58,4 +58,5 @@ export const shopSlice = createSlice({
   });
   
   export const { currentShop } = shopSlice.actions;
+  export const instanceShop = (state) => state.shop.instanceShop;
   export default shopSlice.reducer;

@@ -14,6 +14,7 @@ import { Search } from "react-bootstrap-icons";
 const UpdateMedicineForm = () => {
   const [searchedQuery, setSearchedQuery] = useState("");
 
+
   const validate = Yup.object({
     name: Yup.string().required("Required*"),
     in_stock_total: Yup.number().required("Required*").positive().integer(),
@@ -72,14 +73,21 @@ const UpdateMedicineForm = () => {
             <Form>
               <Container>
                 <Row>
-                  <Col md={6}>
+                  <Col md={4}>
                     <TextField label="Medicine Name" name="name" type="text" />
                   </Col>
-                  <Col md={6}>
+                  <Col md={4}>
                     <TextField
                       type="number"
                       name="in_stock_total"
                       label="In Stock Total"
+                    />
+                  </Col>
+                  <Col md={4}>
+                    <TextField
+                      type="number"
+                      name="free_strip"
+                      label="Free strip"
                     />
                   </Col>
                 </Row>

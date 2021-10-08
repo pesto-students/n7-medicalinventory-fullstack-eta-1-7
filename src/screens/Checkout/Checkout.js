@@ -1,10 +1,28 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Card, Button } from "react-bootstrap";
 import { PDFInvoice } from "../../common/invoice";
 import "./Checkout.css";
 import ls from "local-storage";
+import EmptyState from "../../components/EmptyState/EmptyState";
 
 const Checkout = () => {
+  const [cartData, setCartData] = useState([]);
+  const [totalAmount, setTotalAmount] = useState(0);
+
+  useEffect(() => {
+    const currentCartData = JSON.parse(ls.get("cartData"));
+    if (currentCartData && currentCartData.length > 0) {
+      setCartData(currentCartData);
+
+      let currentTotalAmount = 0;
+      currentCartData.map((item) => {
+        currentTotalAmount += item.count * item.sell_price;
+      });
+
+      setTotalAmount(currentTotalAmount);
+    }
+  }, []);
+
   const invoiceGenerator = () => {
     const logo =
       "https://www.logomoose.com/wp-content/uploads/2013/08/ms_moose.jpg";
@@ -56,78 +74,91 @@ const Checkout = () => {
     );
   };
 
-  let cartData = JSON.parse(ls.get("cartData"));
-  console.log(cartData);
-
   return (
     <div className="checkout-page-wrapper">
-      <div className="order-summary-wrapper">Order Summary</div>
-      <div className="products-wrapper">PRODUCTS</div>
-      <div className="checkout-page-content-wrapper">
-        <div className="flex-1">
-          <Card className="margin-bottom-12">
-            <Card.Body>
-              {[1, 2, 3].map((item) => (
-                <section className="medicine-card-wrapper">
-                  <div className="flex-content-sb">
-                    <div className="flex-column">
-                      <span className="font-weight-700">Dolo 650 Tablet</span>
-                      <span className="tablets-strip">strip of 15 tablets</span>
-                    </div>
+      {cartData && cartData.length > 0 ? (
+        <>
+          <div className="order-summary-wrapper">Order Summary</div>
+          <div className="products-wrapper">PRODUCTS</div>
+          <div className="checkout-page-content-wrapper">
+            <div className="flex-1">
+              <Card className="margin-bottom-12">
+                <Card.Body>
+                  {cartData.map((item) => (
+                    <section className="medicine-card-wrapper">
+                      <div className="flex-content-sb">
+                        <div className="flex-column">
+                          <span className="font-weight-700">{item.name}</span>
+                          {/* <span className="tablets-strip">
+                          strip of 15 tablets
+                        </span> */}
+                        </div>
 
-                    <div className="checkout-price">Rs. 51.56</div>
+                        <div className="checkout-price">
+                          Rs. {item.sell_price * Number(item.count)}
+                        </div>
+                      </div>
+
+                      <div className="checkout-page--counter-wrapper">
+                        <div className="checkout-counter--wrapper">
+                          <div className="increment-decrement-counter-wrapper">
+                            -
+                          </div>
+                          &nbsp;
+                          <div classname="checkout-page--counter-value">
+                            {item.count}
+                          </div>
+                          &nbsp;
+                          <div className="increment-decrement-counter-wrapper">
+                            +
+                          </div>
+                        </div>
+                        <div>
+                          <Button variant="secondary" size="sm">
+                            Remove
+                          </Button>
+                        </div>
+                      </div>
+                    </section>
+                  ))}
+                </Card.Body>
+              </Card>
+            </div>
+            <div className="checkout-payment-details">
+              <Card>
+                <Card.Body>
+                  <div className="opacity-6">PAYMENT DETAILS</div>
+                  <div className="total-amount">
+                    <div>Total Amount *</div>
+                    <div>Rs. {totalAmount}</div>
                   </div>
 
-                  <div className="checkout-page--counter-wrapper">
-                    <div className="checkout-counter--wrapper">
-                      <div className="increment-decrement-counter-wrapper">
-                        -
-                      </div>
-                      &nbsp;
-                      <div classname="checkout-page--counter-value">9</div>
-                      &nbsp;
-                      <div className="increment-decrement-counter-wrapper">
-                        +
-                      </div>
+                  <div className="total-amoount-wrapper">
+                    <div className="flex-column">
+                      <div className="total-amount-wrapper">TOTAL AMOUNT</div>
+                      <div className="font-weight-bold">Rs. {totalAmount}</div>
                     </div>
                     <div>
-                      <Button variant="secondary" size="sm">
-                        Remove
+                      <Button
+                        className="checkout-proceed-button"
+                        onClick={invoiceGenerator}
+                      >
+                        DOWNLOAD INVOICE
                       </Button>
                     </div>
                   </div>
-                </section>
-              ))}
-            </Card.Body>
-          </Card>
-        </div>
-        <div className="checkout-payment-details">
-          <Card>
-            <Card.Body>
-              <div className="opacity-6">PAYMENT DETAILS</div>
-              <div className="total-amount">
-                <div>Total Amount *</div>
-                <div>Rs. 111.52</div>
-              </div>
-
-              <div className="total-amoount-wrapper">
-                <div className="flex-column">
-                  <div className="total-amount-wrapper">TOTAL AMOUNT</div>
-                  <div className="font-weight-bold">Rs. 111.52</div>
-                </div>
-                <div>
-                  <Button
-                    className="checkout-proceed-button"
-                    onClick={invoiceGenerator}
-                  >
-                    DOWNLOAD INVOICE
-                  </Button>
-                </div>
-              </div>
-            </Card.Body>
-          </Card>
-        </div>
-      </div>
+                </Card.Body>
+              </Card>
+            </div>
+          </div>
+        </>
+      ) : (
+        <EmptyState
+          actions={
+            <h5 className="empty-state-cart">Please add a medicine to cart</h5>
+          }
+        />
+      )}
     </div>
   );
 };

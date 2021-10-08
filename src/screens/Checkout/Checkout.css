@@ -157,3 +157,7 @@ section:last-child {
   border: none;
   background-color: var(--theme-color);
 }
+
+.empty-state-cart {
+  color: #ff0000;
+}

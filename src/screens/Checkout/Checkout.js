@@ -2,6 +2,7 @@ import React from "react";
 import { Card, Button } from "react-bootstrap";
 import { PDFInvoice } from "../../common/invoice";
 import "./Checkout.css";
+import ls from "local-storage";
 
 const Checkout = () => {
   const invoiceGenerator = () => {
@@ -55,6 +56,9 @@ const Checkout = () => {
     );
   };
 
+  let cartData = JSON.parse(ls.get("cartData"));
+  console.log(cartData);
+
   return (
     <div className="checkout-page-wrapper">
       <div className="order-summary-wrapper">Order Summary</div>
@@ -64,7 +68,7 @@ const Checkout = () => {
           <Card className="margin-bottom-12">
             <Card.Body>
               {[1, 2, 3].map((item) => (
-                <div className="medicine-card-wrapper">
+                <section className="medicine-card-wrapper">
                   <div className="flex-content-sb">
                     <div className="flex-column">
                       <span className="font-weight-700">Dolo 650 Tablet</span>
@@ -79,9 +83,9 @@ const Checkout = () => {
                       <div className="increment-decrement-counter-wrapper">
                         -
                       </div>
-
+                      &nbsp;
                       <div classname="checkout-page--counter-value">9</div>
-
+                      &nbsp;
                       <div className="increment-decrement-counter-wrapper">
                         +
                       </div>
@@ -92,9 +96,8 @@ const Checkout = () => {
                       </Button>
                     </div>
                   </div>
-                </div>
+                </section>
               ))}
-              <div className="add-more-items">+ ADD MORE ITEMS</div>
             </Card.Body>
           </Card>
         </div>

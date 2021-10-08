@@ -4,11 +4,36 @@ import TextField from "../../components/TextField/TextField";
 import * as Yup from "yup";
 import { Formik, Form } from "formik";
 import axios from "axios";
+import { AUTH_TOKEN } from "../../localStorage";
+import { toast } from "../../components/Toast/Toast";
 
 const AddMedicineForm = () => {
+  const submitForm = async (payload) => {
+    const config = {
+      headers: {
+        Authorization: `Token ${AUTH_TOKEN}`,
+      },
+    };
+
+    await axios
+      .post(
+        "https://abdulrashidalaskar.pythonanywhere.com/api/medicine",
+        payload,
+        config
+      )
+      .then((response) => {
+        toast.success("Medicine added successfully");
+      })
+      .catch((error) => {
+        toast.error(error.message || "Something went wrong!");
+      });
+  };
+
   const validate = Yup.object({
     name: Yup.string().required("Required*"),
     company: Yup.string().required("Required*"),
+    medical_typ: Yup.string().required("Required*"),
+    in_single_stock_total: Yup.number().required("Required*"),
     manufacture: Yup.string().required("Required*"),
     qty_in_strip: Yup.number().required("Required*").positive().integer(),
     in_stock_total: Yup.number().required("Required*").positive().integer(),
@@ -21,6 +46,12 @@ const AddMedicineForm = () => {
     sell_price: Yup.string().required("Required*"),
     buy_price: Yup.string().required("Required*"),
     medicine_tags: Yup.string().required("Required*"),
+    expire_date: Yup.date().required("Required*"),
+    mfg_date: Yup.date().required("Required*"),
+    category: Yup.string().required("Required*"),
+    unit_of_measure: Yup.string().required("Required*"),
+    schedule_drug: Yup.string().required("Required*"),
+    buyer: Yup.string().required("Required*"),
   });
 
   return (
@@ -29,6 +60,8 @@ const AddMedicineForm = () => {
       initialValues={{
         name: "",
         company: "",
+        medical_typ: "",
+        in_single_stock_total: "",
         manufacture: "",
         qty_in_strip: "",
         in_stock_total: "",
@@ -41,9 +74,15 @@ const AddMedicineForm = () => {
         sell_price: "",
         buy_price: "",
         medicine_tags: "",
+        expire_date: "",
+        mfg_date: "",
+        category: "",
+        unit_of_measure: "",
+        schedule_drug: "",
+        buyer: "",
       }}
       onSubmit={(values) => {
-        console.log(values);
+        submitForm(values);
       }}
     >
       {(formik) => (
@@ -72,6 +111,32 @@ const AddMedicineForm = () => {
                     type="number"
                     name="qty_in_strip"
                     label="Quantity In Strip"
+                  />
+                </Col>
+              </Row>
+
+              <Row>
+                <Col md={6}>
+                  <TextField type="text" name="category" label="Category" />
+                </Col>
+                <Col md={6}>
+                  <TextField type="text" name="buyer" label="Buyer" />
+                </Col>
+              </Row>
+
+              <Row>
+                <Col md={6}>
+                  <TextField
+                    type="text"
+                    name="medical_typ"
+                    label="Medical Type"
+                  />
+                </Col>
+                <Col md={6}>
+                  <TextField
+                    type="number"
+                    name="in_single_stock_total"
+                    label="In single stock total"
                   />
                 </Col>
               </Row>
@@ -136,6 +201,41 @@ const AddMedicineForm = () => {
                   />
                 </Col>
               </Row>
+
+              <Row>
+                <Col md={6}>
+                  <TextField
+                    type="text"
+                    name="unit_of_measure"
+                    label="Unit of Measure"
+                  />
+                </Col>
+                <Col md={6}>
+                  <TextField
+                    type="text"
+                    name="schedule_drug"
+                    label="Schedule Drug"
+                  />
+                </Col>
+              </Row>
+
+              <Row>
+                <Col md={6}>
+                  <TextField
+                    type="date"
+                    name="expire_date"
+                    label="Expiry Date"
+                  />
+                </Col>
+                <Col md={6}>
+                  <TextField
+                    type="date"
+                    name="mfg_date"
+                    label="Manufacturing Date"
+                  />
+                </Col>
+              </Row>
+
               <Row>
                 <div className="d-grid gap-2">
                   <Button

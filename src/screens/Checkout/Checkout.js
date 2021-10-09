@@ -136,7 +136,7 @@ const Checkout = () => {
 
     axios
       .post(
-        "http://abdulrashidalaskar.pythonanywhere.com/api/order/",
+        "https://abdulrashidalaskar.pythonanywhere.com/api/order/",
         { medicines: filteredData },
         config
       )

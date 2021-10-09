@@ -11,7 +11,7 @@ import "./Header.css";
 import { useHistory, useLocation, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getSearchedData } from "../../features/search/searchSlice";
-import { selectIsAdmin } from "../../features/login/loginSlice";
+import { logout, selectIsAdmin } from "../../features/login/loginSlice";
 
 
 const Header = () => {
@@ -108,6 +108,7 @@ const Header = () => {
                     }}
                   />
                 )}
+
                 <PlusCircle
                   size={30}
                   color="#28b8b0"
@@ -128,6 +129,9 @@ const Header = () => {
                   size={30}
                   color="#28b8b0"
                   className="cursor-pointer"
+                  onClick={() => {
+                   dispatch(logout())
+                  }}
                 />
               </div>
             </Nav>

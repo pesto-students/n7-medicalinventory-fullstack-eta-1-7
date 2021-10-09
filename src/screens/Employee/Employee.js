@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{useEffect} from 'react'
 import * as Yup from "yup";
 import { Formik, Form } from "formik";
 import './Employee.css'
@@ -10,10 +10,16 @@ import { Container, Row, Col, Button } from "react-bootstrap";
 import TextField from "../../components/TextField/TextField";
 import { toast } from "../../components/Toast/Toast";
 import { instanceShop } from '../../features/shop/shopSlice';
+import { selectIsAdmin } from '../../features/login/loginSlice';
 function Employee() {
     const history = useHistory()
     const shop_id = useSelector(instanceShop)
-    console.log(shop_id)
+    const isAdmin = useSelector(selectIsAdmin)
+    useEffect(() => {
+      if(!isAdmin){
+        history.replace('/')
+      }
+    }, [])
     const handleSubmit = async (values) => {
 
         console.log(values)

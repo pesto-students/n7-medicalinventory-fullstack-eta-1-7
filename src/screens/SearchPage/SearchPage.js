@@ -14,7 +14,7 @@ import { useHistory } from "react-router-dom";
 import Loader from "../../components/Loader/Loader";
 import EmptyState from "../../components/EmptyState/EmptyState";
 import { getSearchedData } from "../../features/search/searchSlice";
-
+import Header from "../../components/Header/Header";
 const SORT_BY_MENUS = [
   { label: "Relevance", value: "relevance" },
   { label: "Price: Low to High", value: "lowToHigh" },
@@ -172,7 +172,9 @@ const SearchPage = ({ location }) => {
     filteredListingData.status === "loading"
   ) {
     return (
+
       <>
+      <Header/>
         <div className="search-page-wrapper">
           <div className="search-page--left-panel">
             <div className="m-b-12 clear-filter-wrapper">

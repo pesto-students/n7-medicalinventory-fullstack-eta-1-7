@@ -13,11 +13,12 @@ export const getSearchedData = createAsyncThunk(
   async (searchParams, thunkAPI) => {
     let config = {
       headers: {
-        Authorization: `Token ${AUTH_TOKEN}`,
+        Authorization: `Token ${ls.get('token')}`,
       },
     };
 
     try {
+
       const response = await axios.get(`/search?${searchParams}`, config);
       return response.data;
     } catch (error) {

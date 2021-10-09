@@ -10,7 +10,7 @@ import TextField from "../../components/TextField/TextField";
 import * as Yup from "yup";
 import { Formik, Form } from "formik";
 import { Search } from "react-bootstrap-icons";
-
+import Header from "../../components/Header/Header";
 const UpdateMedicineForm = () => {
   const [searchedQuery, setSearchedQuery] = useState("");
 
@@ -22,6 +22,7 @@ const UpdateMedicineForm = () => {
 
   return (
     <>
+    <Header/>
       <Container>
         <Row>
           <Col>

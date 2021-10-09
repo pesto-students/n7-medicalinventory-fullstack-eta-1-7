@@ -47,6 +47,14 @@ Designs:
 
 
   
+Testing Credentials:
+Admin Credentials : 
+Username :admin
+Password:1234
+
+Employee Credentials:
+Username :abdul
+Password:1234
 
 
 

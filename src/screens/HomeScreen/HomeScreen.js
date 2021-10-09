@@ -18,7 +18,7 @@ function HomeScreen() {
 
         <div className="home__container">
             {isAdmin && search ? shops?.map(item => (
-                <Card >
+                <Card style={{margin :"10px"}}>
                   <Card.Body>
                     <Card.Title>{item.name}</Card.Title>
                     <Card.Text>

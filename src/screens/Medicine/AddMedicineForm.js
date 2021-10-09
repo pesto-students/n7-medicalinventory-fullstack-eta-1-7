@@ -8,13 +8,13 @@ import { AUTH_TOKEN } from "../../localStorage";
 import { toast } from "../../components/Toast/Toast";
 import { instanceShop } from "../../features/shop/shopSlice";
 import {useSelector} from 'react-redux'
-
+import ls from  'local-storage'
 const AddMedicineForm = () => {
   const shop_id  = useSelector(instanceShop)
   const submitForm = async (payload) => {
     const config = {
       headers: {
-        Authorization: `Token ${AUTH_TOKEN}`,
+        Authorization: `Token ${ls.length('token')}`,
       },
     };
 

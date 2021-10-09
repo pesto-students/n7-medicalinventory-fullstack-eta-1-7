@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import {
   Accordion,
@@ -14,7 +15,9 @@ import { useHistory } from "react-router-dom";
 import Loader from "../../components/Loader/Loader";
 import EmptyState from "../../components/EmptyState/EmptyState";
 import { getSearchedData } from "../../features/search/searchSlice";
+import ls from "local-storage";
 import Header from "../../components/Header/Header";
+
 const SORT_BY_MENUS = [
   { label: "Relevance", value: "relevance" },
   { label: "Price: Low to High", value: "lowToHigh" },
@@ -54,6 +57,7 @@ const SearchPage = ({ location }) => {
   const searchedQuery = params.get("searchQuery");
   const [show, setShow] = useState(false);
   const [sortBy, setSortBy] = useState("Relevance");
+  const [currentAddToCartIndex, setCurrentAddToCartIndex] = useState(null);
   const [filters, setFilters] = useState({
     medicine_brand: [],
     product_form: [],
@@ -161,7 +165,44 @@ const SearchPage = ({ location }) => {
     });
   };
 
-  const filteredListingData = useSelector((state) => state.search);
+  const checkDuplicate = (currentItem, oldItems) => {
+    if (oldItems.length == 0) {
+      currentItem.count = 1;
+      oldItems.push(currentItem);
+      return oldItems;
+    }
+    let isFind = false;
+    let findIndex;
+    for (let itemIndex = 0; itemIndex < oldItems.length; itemIndex++) {
+      if (oldItems[itemIndex].id === currentItem.id) {
+        findIndex = itemIndex;
+        isFind = true;
+      }
+    }
+    if (isFind) {
+      oldItems[findIndex].count = oldItems[findIndex].count + 1;
+      return oldItems;
+    }
+    currentItem.count = 1;
+    oldItems.push(currentItem);
+    return oldItems;
+  };
+
+  const handleAddToCart = (item, index) => {
+    let currentItem = { ...item };
+    let oldItems = JSON.parse(ls.get("cartData")) || [];
+    let updateOld = checkDuplicate(currentItem, oldItems);
+
+    ls.set("cartData", JSON.stringify(updateOld));
+
+    //////
+    setCurrentAddToCartIndex(index);
+    setTimeout(() => {
+      setCurrentAddToCartIndex(null);
+    }, 1000);
+  };
+
+  let filteredListingData = useSelector((state) => state.search);
 
   if (filteredListingData.status === "failed") {
     return <>Error</>;
@@ -172,7 +213,6 @@ const SearchPage = ({ location }) => {
     filteredListingData.status === "loading"
   ) {
     return (
-
       <>
       <Header/>
         <div className="search-page-wrapper">
@@ -414,7 +454,7 @@ const SearchPage = ({ location }) => {
                   filteredListingData.searchedData &&
                   filteredListingData.searchedData.length ? (
                     <>
-                      {filteredListingData.searchedData.map((item) => (
+                      {filteredListingData.searchedData.map((item, i) => (
                         <Card className="m-b-12" key={item.id}>
                           <Card.Body>
                             <div className="flex-column">
@@ -434,21 +474,38 @@ const SearchPage = ({ location }) => {
                               </div>
 
                               <div className="search-page--counter-wrapper">
-                                <div className="search-page-wrapper">
-                                  <div className="increment-decrement-counter-wrapper">
-                                    -
-                                  </div>
-
-                                  <div className="search-page--counter-value">
-                                    0
-                                  </div>
-
-                                  <div className="increment-decrement-counter-wrapper">
-                                    +
-                                  </div>
-                                </div>
-                                <div className="search-page--add-cart">
-                                  ADD TO CART
+                                <div className="search-page-wrapper"></div>
+                                <div
+                                  id="addToCartWrapper"
+                                  style={{ display: "flex" }}
+                                >
+                                  {currentAddToCartIndex === i && (
+                                    <div className="search-page--add-cart">
+                                      &#10003;
+                                    </div>
+                                  )}
+                                  &nbsp;
+                                  {currentAddToCartIndex !== i ? (
+                                    <div
+                                      className="search-page--add-cart"
+                                      onClick={() => {
+                                        handleAddToCart(item, i);
+                                      }}
+                                    >
+                                      ADD TO CART
+                                    </div>
+                                  ) : (
+                                    <>
+                                      {currentAddToCartIndex === i && (
+                                        <div
+                                          id="addToCart"
+                                          className="search-page--add-cart"
+                                        >
+                                          ADDED
+                                        </div>
+                                      )}
+                                    </>
+                                  )}
                                 </div>
                               </div>
                             </div>

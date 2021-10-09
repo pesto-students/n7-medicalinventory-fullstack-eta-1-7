@@ -55,7 +55,7 @@ const Header = () => {
         }}
       >
         <Container fluid>
-          <Navbar.Brand href="#home">Medical Inventory</Navbar.Brand>
+          <Navbar.Brand onClick={() => history.replace('/')}>Medical Inventory</Navbar.Brand>
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse
             id="responsive-navbar-nav"

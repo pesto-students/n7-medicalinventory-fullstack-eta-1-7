@@ -7,6 +7,7 @@ import EmptyState from "../../components/EmptyState/EmptyState";
 import { AUTH_TOKEN } from "../../localStorage";
 import axios from "axios";
 import Loader from "../../components/Loader/Loader";
+import { toast } from "../../components/Toast/Toast";
 
 const Checkout = () => {
   const [cartData, setCartData] = useState([]);
@@ -133,8 +134,8 @@ const Checkout = () => {
 
     axios
       .post(
-        "http://abdulrashidalaskar.pythonanywhere.com/api/order",
-        filteredData,
+        "http://abdulrashidalaskar.pythonanywhere.com/api/order/",
+        { medicines: filteredData },
         config
       )
       .then((response) => {
@@ -142,6 +143,7 @@ const Checkout = () => {
         console.log(response);
       })
       .catch((error) => {
+        toast.error("Medicine out of stock!");
         setIsLoading(false);
         console.log(error);
       });

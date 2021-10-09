@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "../../axios";
 import { AUTH_TOKEN } from "../../localStorage";
-
+import ls from 'local-storage'
 const initialState = {
   status: "idle",
   error: "",

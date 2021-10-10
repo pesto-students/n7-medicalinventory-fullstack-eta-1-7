@@ -9,6 +9,8 @@ const initialState = {
   status: "idle",
   isAdmin: false,
   error: "",
+  employeeId:null,
+  companyId:null
 };
 
 export const createTokenAsync = createAsyncThunk(
@@ -31,9 +33,18 @@ export const loginSlice = createSlice({
   name: "login",
   initialState,
   reducers: {
-    log: (state, action) => {
+    logout:(state) => {
+      state.loggedIn = false;
+      state.isAdmin = false;
+      state.employeeId= null
+      state.companyId = null
+
+    },
+    log: (state,action) => {
       state.loggedIn = true;
-      state.isAdmin = action.payload;
+      state.isAdmin = action.payload.admin;
+      state.employeeId = action.payload.employee;
+      state.companyId = action.payload.company;
     },
   },
   extraReducers: (builder) => {
@@ -54,8 +65,8 @@ export const loginSlice = createSlice({
   },
 });
 
-export const { log } = loginSlice.actions;
+export const { log,logout } = loginSlice.actions;
 export const selectUser = (state) => state;
 export const selectLoggedIn = (state) => state.login.loggedIn;
-
+export const selectIsAdmin = (state) => state.login.isAdmin;
 export default loginSlice.reducer;

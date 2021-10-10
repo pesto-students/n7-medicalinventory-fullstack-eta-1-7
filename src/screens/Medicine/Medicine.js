@@ -3,11 +3,13 @@ import { Tabs, Tab, Card } from "react-bootstrap";
 import AddMedicineForm from "./AddMedicineForm";
 import UpdateMedicineForm from "./UpdateMedicineForm";
 import "./Medicine.css";
+import Header from "../../components/Header/Header";
 
 const Medicine = () => {
   const [activeTab, setActiveTab] = useState("addMedicine");
   return (
     <div className="medicine-wrapper">
+      <Header/>
       <Card>
         <Card.Body>
           <Tabs

@@ -11,12 +11,13 @@ import "./Header.css";
 import { useHistory, useLocation, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getSearchedData } from "../../features/search/searchSlice";
-import { IS_ADMIN_USER } from "../../localStorage";
-
-const IS_ADMIN = IS_ADMIN_USER === "true" ? true : false;
-
+import { logout, selectIsAdmin } from "../../features/login/loginSlice";
+import ls from 'local-storage'
+import axios from "axios";
+import { toast } from "../../components/Toast/Toast";
 const Header = () => {
   const dispatch = useDispatch();
+  const isAdmin = useSelector(selectIsAdmin)
   const history = useHistory();
   const location = useLocation();
   const [searchedQuery, setSearchedQuery] = useState("");
@@ -30,6 +31,26 @@ const Header = () => {
       setSearchedQuery(params.get("searchQuery"));
     }
   }, []);
+
+  const logoutToken = async () => {
+    const config = {
+      headers: {
+        Authorization: `Token ${ls.get('token')}`,
+      },
+    };
+
+    await axios
+      .get(
+        "https://abdulrashidalaskar.pythonanywhere.com/logout/",
+        config
+      )
+      .then((response) => {
+        toast.success("Logout successfully");
+      })
+      .catch((error) => {
+        toast.error(error.message || "Something went wrong!");
+      });
+  }
 
   const getFilteredData = async () => {
     if (searchedQuery) {
@@ -55,7 +76,7 @@ const Header = () => {
         }}
       >
         <Container fluid>
-          <Navbar.Brand href="#home">Medical Inventory</Navbar.Brand>
+          <Navbar.Brand onClick={() => history.replace('/')}>Medical Inventory</Navbar.Brand>
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse
             id="responsive-navbar-nav"
@@ -98,13 +119,17 @@ const Header = () => {
 
             <Nav>
               <div className="nav-icon--right">
-                {IS_ADMIN && (
+                {isAdmin && (
                   <PersonPlus
                     size={30}
                     color="#28b8b0"
                     className="pointer-margin-right-20"
+                    onClick={() => {
+                      history.push("/employee");
+                    }}
                   />
                 )}
+
                 <PlusCircle
                   size={30}
                   color="#28b8b0"
@@ -125,10 +150,14 @@ const Header = () => {
                   size={30}
                   color="#28b8b0"
                   className="cursor-pointer"
+                  onClick={() => {
+                    logoutToken()
+                   dispatch(logout())
+                  }}
                 />
               </div>
             </Nav>
-            {IS_ADMIN && (
+            {isAdmin && (
               <Nav className="nav-bar--small-screen">
                 <div className="nav-bar-icons--responsive">
                   <span>

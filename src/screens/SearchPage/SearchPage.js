@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import {
   Accordion,
@@ -15,6 +16,7 @@ import Loader from "../../components/Loader/Loader";
 import EmptyState from "../../components/EmptyState/EmptyState";
 import { getSearchedData } from "../../features/search/searchSlice";
 import ls from "local-storage";
+import Header from "../../components/Header/Header";
 
 const SORT_BY_MENUS = [
   { label: "Relevance", value: "relevance" },
@@ -212,6 +214,7 @@ const SearchPage = ({ location }) => {
   ) {
     return (
       <>
+      <Header/>
         <div className="search-page-wrapper">
           <div className="search-page--left-panel">
             <div className="m-b-12 clear-filter-wrapper">

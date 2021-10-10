@@ -7,16 +7,21 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   createTokenAsync,
   log,
+  logout,
+  selectIsAdmin,
   selectLoggedIn,
   selectUser,
 } from "./features/login/loginSlice";
 import Landing from "./screens/LoginScreen/Landing";
 import Employee from "./screens/Employee/Employee";
-import Header from "./components/Header/Header";
+
 import ErrorBoundry from "./components/ErrorBoundary/ErrorBoundary";
 import { AUTH_TOKEN } from "./localStorage";
 import Loader from "./components/Loader/Loader";
-
+import axios from './axios'
+import { useHistory } from "react-router";
+import ls from 'local-storage'
+import { currentShop } from "./features/shop/shopSlice";
 const Checkout = React.lazy(() =>
   import(/* webpackChunkName: 'checkout' */ "./screens/Checkout/Checkout")
 );
@@ -29,19 +34,40 @@ const Medicine = React.lazy(() =>
   import(/* webpackChunkName: 'checkout' */ "./screens/Medicine/Medicine")
 );
 
+
+
 function App() {
   const loggedIn = useSelector(selectLoggedIn);
+  const isAdmin = useSelector(selectIsAdmin);
   const dispatch = useDispatch();
-
+  const history = useHistory();
   console.log(loggedIn);
-  const user = AUTH_TOKEN;
   const shops = useSelector((state) => state.shop.shops);
+  const checkTokenValidation = async () => {
+    try {
+        const response = await axios.post('/api-token-auth/',{},{
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Token ${ls.get('token')}`
+            },
+          })
+        dispatch(log({admin:response.data.isAdmin,employee:response.data.employeeId,company:response.data.companyId}))
+        if(!(response.data.isAdmin)){
+          dispatch(currentShop(response.data.companyId))
+        }
+        
+    } 
+      catch (error) {
+        dispatch(logout())
 
+      }
+
+}
   useEffect(() => {
     const token = AUTH_TOKEN;
     console.log(token);
     if (token) {
-      dispatch(log());
+      checkTokenValidation()
     }
   }, []);
 
@@ -54,9 +80,10 @@ function App() {
           <>
             <React.Suspense fallback={<Loader />}>
               <ErrorBoundry>
-                <Header />
+         
                 <div className="app-wrapper">
                   <Switch>
+                  
                     <Route
                       exact
                       path="/"

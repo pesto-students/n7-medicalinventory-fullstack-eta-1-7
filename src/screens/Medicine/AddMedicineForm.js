@@ -6,18 +6,21 @@ import { Formik, Form } from "formik";
 import axios from "axios";
 import { AUTH_TOKEN } from "../../localStorage";
 import { toast } from "../../components/Toast/Toast";
-
+import { instanceShop } from "../../features/shop/shopSlice";
+import {useSelector} from 'react-redux'
+import ls from  'local-storage'
 const AddMedicineForm = () => {
+  const shop_id  = useSelector(instanceShop)
   const submitForm = async (payload) => {
     const config = {
       headers: {
-        Authorization: `Token ${AUTH_TOKEN}`,
+        Authorization: `Token ${ls.get('token')}`,
       },
     };
 
     await axios
       .post(
-        "https://abdulrashidalaskar.pythonanywhere.com/api/medicine",
+        "https://abdulrashidalaskar.pythonanywhere.com/api/medicine/",
         payload,
         config
       )
@@ -33,7 +36,7 @@ const AddMedicineForm = () => {
     name: Yup.string().required("Required*"),
     company: Yup.string().required("Required*"),
     medical_typ: Yup.string().required("Required*"),
-    in_single_stock_total: Yup.number().required("Required*"),
+    // in_single_stock_total: Yup.number().required("Required*"),
     manufacture: Yup.string().required("Required*"),
     qty_in_strip: Yup.number().required("Required*").positive().integer(),
     in_stock_total: Yup.number().required("Required*").positive().integer(),
@@ -43,14 +46,14 @@ const AddMedicineForm = () => {
     batch_no: Yup.string().required("Required*"),
     s_gst: Yup.string().required("Required*"),
     c_gst: Yup.string().required("Required*"),
-    sell_price: Yup.string().required("Required*"),
-    buy_price: Yup.string().required("Required*"),
+    sell_price: Yup.number().required("Required*").positive().integer(),
+    buy_price: Yup.number().required("Required*").positive().integer(),
     medicine_tags: Yup.string().required("Required*"),
     expire_date: Yup.date().required("Required*"),
     mfg_date: Yup.date().required("Required*"),
     category: Yup.string().required("Required*"),
     unit_of_measure: Yup.string().required("Required*"),
-    schedule_drug: Yup.string().required("Required*"),
+    // schedule_drug: Yup.string().required("Required*"),
     buyer: Yup.string().required("Required*"),
   });
 
@@ -59,9 +62,7 @@ const AddMedicineForm = () => {
       validationSchema={validate}
       initialValues={{
         name: "",
-        company: "",
-        medical_typ: "",
-        in_single_stock_total: "",
+        company: shop_id,
         manufacture: "",
         qty_in_strip: "",
         in_stock_total: "",
@@ -78,7 +79,6 @@ const AddMedicineForm = () => {
         mfg_date: "",
         category: "",
         unit_of_measure: "",
-        schedule_drug: "",
         buyer: "",
       }}
       onSubmit={(values) => {
@@ -94,7 +94,7 @@ const AddMedicineForm = () => {
                   <TextField label="Medicine Name" name="name" type="text" />
                 </Col>
                 <Col md={6}>
-                  <TextField label="Company Name" name="company" type="text" />
+                  <TextField label="Company Name" name="company" value={shop_id}  disabled type="text" />
                 </Col>
               </Row>
 
@@ -135,20 +135,14 @@ const AddMedicineForm = () => {
                 <Col md={6}>
                   <TextField
                     type="number"
-                    name="in_single_stock_total"
-                    label="In single stock total"
+                    name="in_stock_total"
+                    label="In Stock Total"
                   />
                 </Col>
               </Row>
 
               <Row>
-                <Col md={6}>
-                  <TextField
-                    type="number"
-                    name="in_stock_total"
-                    label="In Stock Total"
-                  />
-                </Col>
+               
                 <Col md={6}>
                   <TextField
                     type="number"
@@ -156,9 +150,6 @@ const AddMedicineForm = () => {
                     label="Free Strip"
                   />
                 </Col>
-              </Row>
-
-              <Row>
                 <Col md={6}>
                   <TextField
                     type="text"
@@ -166,33 +157,40 @@ const AddMedicineForm = () => {
                     label="Description"
                   />
                 </Col>
+              </Row>
+
+              <Row>
+                
                 <Col md={6}>
                   <TextField type="text" name="shelf_no" label="Shelf Number" />
                 </Col>
-              </Row>
-
-              <Row>
                 <Col md={6}>
                   <TextField type="text" name="batch_no" label="Batch Number" />
                 </Col>
+              </Row>
+
+              <Row>
+                
                 <Col md={6}>
                   <TextField type="text" name="s_gst" label="SGST" />
                 </Col>
-              </Row>
-
-              <Row>
                 <Col md={6}>
                   <TextField type="text" name="c_gst" label="CGST" />
                 </Col>
-                <Col md={6}>
-                  <TextField type="text" name="sell_price" label="Sell Price" />
-                </Col>
               </Row>
 
               <Row>
+                
                 <Col md={6}>
-                  <TextField type="text" name="buy_price" label="Buy Price" />
+                  <TextField type="number" name="sell_price" label="Sell Price" />
                 </Col>
+                <Col md={6}>
+                  <TextField type="number" name="buy_price" label="Buy Price" />
+                </Col>
+              </Row>
+              
+              <Row>
+                
                 <Col md={6}>
                   <TextField
                     type="text"
@@ -200,9 +198,6 @@ const AddMedicineForm = () => {
                     label="Medicine Tags"
                   />
                 </Col>
-              </Row>
-
-              <Row>
                 <Col md={6}>
                   <TextField
                     type="text"
@@ -210,15 +205,9 @@ const AddMedicineForm = () => {
                     label="Unit of Measure"
                   />
                 </Col>
-                <Col md={6}>
-                  <TextField
-                    type="text"
-                    name="schedule_drug"
-                    label="Schedule Drug"
-                  />
-                </Col>
               </Row>
 
+ 
               <Row>
                 <Col md={6}>
                   <TextField

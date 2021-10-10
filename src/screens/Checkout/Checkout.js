@@ -8,13 +8,14 @@ import { AUTH_TOKEN } from "../../localStorage";
 import axios from "axios";
 import Loader from "../../components/Loader/Loader";
 import { toast } from "../../components/Toast/Toast";
-
+import { useHistory } from "react-router";
+import Header from "../../components/Header/Header";
 const Checkout = () => {
   const [cartData, setCartData] = useState([]);
   const [totalAmount, setTotalAmount] = useState(0);
   const [filteredDataForInvoice, setFilteredDataForInvoice] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-
+  const history = useHistory()
   useEffect(() => {
     const currentCartData = JSON.parse(ls.get("cartData"));
     if (currentCartData && currentCartData.length > 0) {
@@ -84,6 +85,7 @@ const Checkout = () => {
     setIsLoading(false);
     setCartData([]);
     ls.remove("cartData");
+    // history.goBack()
   };
 
   const decrementCountHandler = async (item) => {
@@ -134,7 +136,7 @@ const Checkout = () => {
 
     axios
       .post(
-        "http://abdulrashidalaskar.pythonanywhere.com/api/order/",
+        "https://abdulrashidalaskar.pythonanywhere.com/api/order/",
         { medicines: filteredData },
         config
       )
@@ -150,7 +152,10 @@ const Checkout = () => {
   };
 
   return (
+    <>
+    <Header/>
     <div className="checkout-page-wrapper">
+      
       {isLoading ? (
         <Loader />
       ) : (
@@ -267,6 +272,7 @@ const Checkout = () => {
         </>
       )}
     </div>
+    </>
   );
 };
 

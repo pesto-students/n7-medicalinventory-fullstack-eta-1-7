@@ -15,7 +15,7 @@ const EmptyState = ({ actions }) => {
       <p>
         <h4>No data found!</h4>
       </p>
-      <p>{actions}</p>
+      {actions}
     </div>
   );
 };

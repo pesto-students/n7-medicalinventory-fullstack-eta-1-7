@@ -10,22 +10,27 @@ import TextField from "../../components/TextField/TextField";
 import * as Yup from "yup";
 import { Formik, Form } from "formik";
 import { Search } from "react-bootstrap-icons";
+import Header from "../../components/Header/Header";
+import ls from 'local-storage'
 import axios from "axios";
-import { AUTH_TOKEN } from "../../localStorage";
+import { toast } from "../../components/Toast/Toast";
 
 const UpdateMedicineForm = () => {
   const [searchedQuery, setSearchedQuery] = useState("");
   const [searchSelectorData, setSearchSelectorData] = useState("");
+  const [med, setMed] = useState('')
+  const [medId, setMedId] = useState('')
 
   const validate = Yup.object({
-    name: Yup.string().required("Required*"),
+    // name: Yup.string().required("Required*"),
     in_stock_total: Yup.number().required("Required*").positive().integer(),
+    free_strip: Yup.number().required("Required*").positive().integer()
   });
 
   const searchMedicine = () => {
     let config = {
       headers: {
-        Authorization: `Token ${AUTH_TOKEN}`,
+        Authorization: `Token ${ls.get('token')}`,
       },
     };
 
@@ -41,30 +46,31 @@ const UpdateMedicineForm = () => {
         console.log(error);
       });
   };
-
-  const getMedicineData = (id) => {
+  const updateMedicineData = (values) => {
     let config = {
       headers: {
-        Authorization: `Token ${AUTH_TOKEN}`,
+        'Content-Type': 'application/json',
+        'Authorization': `Token ${ls.get('token')}`,
       },
     };
 
     axios
-      .get(
-        `https://abdulrashidalaskar.pythonanywhere.com/api/medicine/${id}/`,
+      .patch(
+        `https://abdulrashidalaskar.pythonanywhere.com/api/medicine/${medId}/`,
+        values,
         config
       )
       .then((response) => {
-        console.log(response);
+        toast.success("Medicine updated successfully");
       })
       .catch((error) => {
-        console.log(error);
+        toast.error(error.message || "Something went wrong!");
       });
   };
-
   return (
     <>
-      <Container>
+
+      <Container >
         <Row>
           <Col>
             <BootstrapForm
@@ -73,18 +79,36 @@ const UpdateMedicineForm = () => {
                 e.preventDefault();
               }}
             >
-              <BootstrapForm.Control
-                placeholder="Search.."
-                type="text"
-                name="searchbox"
-                value={searchedQuery}
-                className="header-form-control"
-                onChange={(e) => {
-                  setSearchedQuery(e.target.value);
-                }}
-              />
+              <div style={{width:"100%"}}>
+                <div style={{display:"flex"}}>
+                  <BootstrapForm.Control
+                    placeholder="Search.."
+                    type="text"
+                    name="searchbox"
+                    value={searchedQuery}
+                    className="header-form-control"
+                    onChange={(e) => {
+                      setSearchedQuery(e.target.value);
+                    }}
+                  />
+                  <Button
+                    type="submit"
+                    disabled={!searchedQuery}
+                    style={{
+                      border: "none",
+                      borderTopLeftRadius: 0,
+                      borderBottomLeftRadius: 0,
+                      backgroundColor: "#28b8b0",
+                    }}
+                    onClick={() => {
+                      searchMedicine();
+                    }}
+                  >
+                    <Search size={25} />
+                  </Button>
+              </div>
               {searchSelectorData && searchSelectorData.length && (
-                <div className="search-selector-wrapper">
+                <div className="search-selector-wrapper" >
                   {searchSelectorData &&
                     searchSelectorData.length &&
                     searchSelectorData.map((item) => (
@@ -92,45 +116,38 @@ const UpdateMedicineForm = () => {
                         <Col md={12}>
                           <div
                             onClick={() => {
-                              getMedicineData(item.id);
+                              setMed(item.name);
+                              setMedId(item.id)
                             }}
-                            className="search-selector--item"
+                            className="header-form-control form-control"
                           >
                             {item.name}
                           </div>
                         </Col>
                       </Row>
                     ))}
+                    
                 </div>
+                
               )}
-              <Button
-                type="submit"
-                disabled={!searchedQuery}
-                style={{
-                  border: "none",
-                  borderTopLeftRadius: 0,
-                  borderBottomLeftRadius: 0,
-                  backgroundColor: "#28b8b0",
-                }}
-                onClick={() => {
-                  searchMedicine();
-                }}
-              >
-                <Search size={25} />
-              </Button>
+              </div>
+              
             </BootstrapForm>
           </Col>
+          
         </Row>
+        
       </Container>
       <br />
       <Formik
         validationSchema={validate}
         initialValues={{
-          name: "",
           in_stock_total: "",
+          free_strip:""
         }}
         onSubmit={(values) => {
           console.log(values);
+          updateMedicineData(values)
         }}
       >
         {(formik) => (
@@ -138,14 +155,21 @@ const UpdateMedicineForm = () => {
             <Form>
               <Container>
                 <Row>
-                  <Col md={6}>
-                    <TextField label="Medicine Name" name="name" type="text" />
+                  <Col md={4}>
+                    <TextField label="Medicine Name" value={med}  name="name" type="text" />
                   </Col>
-                  <Col md={6}>
+                  <Col md={4}>
                     <TextField
                       type="number"
                       name="in_stock_total"
                       label="In Stock Total"
+                    />
+                  </Col>
+                  <Col md={4}>
+                    <TextField
+                      type="number"
+                      name="free_strip"
+                      label="Free strip"
                     />
                   </Col>
                 </Row>

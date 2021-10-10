@@ -1,3 +1,7 @@
+:root {
+  --header-height: 0px;
+
+}
 .home__container {
   height: 100vh;
   display: flex;

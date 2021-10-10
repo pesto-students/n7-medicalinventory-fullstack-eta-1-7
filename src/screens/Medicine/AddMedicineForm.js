@@ -14,7 +14,7 @@ const AddMedicineForm = () => {
   const submitForm = async (payload) => {
     const config = {
       headers: {
-        Authorization: `Token ${ls.length('token')}`,
+        Authorization: `Token ${ls.get('token')}`,
       },
     };
 

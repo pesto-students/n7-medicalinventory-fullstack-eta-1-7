@@ -12,8 +12,9 @@ import { useHistory, useLocation, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getSearchedData } from "../../features/search/searchSlice";
 import { logout, selectIsAdmin } from "../../features/login/loginSlice";
-
-
+import ls from 'local-storage'
+import axios from "axios";
+import { toast } from "../../components/Toast/Toast";
 const Header = () => {
   const dispatch = useDispatch();
   const isAdmin = useSelector(selectIsAdmin)
@@ -30,6 +31,26 @@ const Header = () => {
       setSearchedQuery(params.get("searchQuery"));
     }
   }, []);
+
+  const logoutToken = async () => {
+    const config = {
+      headers: {
+        Authorization: `Token ${ls.get('token')}`,
+      },
+    };
+
+    await axios
+      .get(
+        "https://abdulrashidalaskar.pythonanywhere.com/logout/",
+        config
+      )
+      .then((response) => {
+        toast.success("Logout successfully");
+      })
+      .catch((error) => {
+        toast.error(error.message || "Something went wrong!");
+      });
+  }
 
   const getFilteredData = async () => {
     if (searchedQuery) {
@@ -130,6 +151,7 @@ const Header = () => {
                   color="#28b8b0"
                   className="cursor-pointer"
                   onClick={() => {
+                    logoutToken()
                    dispatch(logout())
                   }}
                 />

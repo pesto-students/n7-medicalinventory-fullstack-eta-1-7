@@ -13,6 +13,7 @@ import { Search } from "react-bootstrap-icons";
 import Header from "../../components/Header/Header";
 import ls from 'local-storage'
 import axios from "axios";
+import { toast } from "../../components/Toast/Toast";
 
 const UpdateMedicineForm = () => {
   const [searchedQuery, setSearchedQuery] = useState("");
@@ -60,10 +61,10 @@ const UpdateMedicineForm = () => {
         config
       )
       .then((response) => {
-        console.log(response);
+        toast.success("Medicine updated successfully");
       })
       .catch((error) => {
-        console.log(error);
+        toast.error(error.message || "Something went wrong!");
       });
   };
   return (

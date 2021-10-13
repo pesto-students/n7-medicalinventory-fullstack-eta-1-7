@@ -15,7 +15,7 @@ const Checkout = () => {
   const [totalAmount, setTotalAmount] = useState(0);
   const [filteredDataForInvoice, setFilteredDataForInvoice] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const history = useHistory()
+  const history = useHistory();
   useEffect(() => {
     const currentCartData = JSON.parse(ls.get("cartData"));
     if (currentCartData && currentCartData.length > 0) {
@@ -92,10 +92,9 @@ const Checkout = () => {
     let copyData = { ...item };
     if (copyData.count > 1) {
       copyData.count = copyData.count - 1;
-      let filteredDdata = cartData.filter(
-        (cartItem) => cartItem.id !== item.id
+      const filteredDdata = cartData.map((obj) =>
+        copyData.id === obj.id ? copyData : obj
       );
-      await filteredDdata.push(copyData);
       await setCartData(filteredDdata);
       await ls.remove("cartData");
       await ls.set("cartData", JSON.stringify(filteredDdata));
@@ -105,8 +104,9 @@ const Checkout = () => {
   const incrementCountHandler = async (item) => {
     let copyData = { ...item };
     copyData.count = copyData.count + 1;
-    let filteredDdata = cartData.filter((cartItem) => cartItem.id !== item.id);
-    await filteredDdata.push(copyData);
+    const filteredDdata = cartData.map((obj) =>
+      copyData.id === obj.id ? copyData : obj
+    );
     await setCartData(filteredDdata);
     await ls.remove("cartData");
     await ls.set("cartData", JSON.stringify(filteredDdata));
@@ -153,125 +153,124 @@ const Checkout = () => {
 
   return (
     <>
-    <Header/>
-    <div className="checkout-page-wrapper">
-      
-      {isLoading ? (
-        <Loader />
-      ) : (
-        <>
-          {cartData && cartData.length > 0 ? (
-            <>
-              <div className="order-summary-wrapper">Order Summary</div>
-              <div className="products-wrapper">PRODUCTS</div>
-              <div className="checkout-page-content-wrapper">
-                <div className="flex-1">
-                  <Card className="margin-bottom-12">
-                    <Card.Body>
-                      {cartData.map((item) => (
-                        <section className="medicine-card-wrapper">
-                          <div className="flex-content-sb">
-                            <div className="flex-column">
-                              <span className="font-weight-700">
-                                {item.name}
-                              </span>
-                              {/* <span className="tablets-strip">
+      <Header />
+      <div className="checkout-page-wrapper">
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <>
+            {cartData && cartData.length > 0 ? (
+              <>
+                <div className="order-summary-wrapper">Order Summary</div>
+                <div className="products-wrapper">PRODUCTS</div>
+                <div className="checkout-page-content-wrapper">
+                  <div className="flex-1">
+                    <Card className="margin-bottom-12">
+                      <Card.Body>
+                        {cartData.map((item) => (
+                          <section className="medicine-card-wrapper">
+                            <div className="flex-content-sb">
+                              <div className="flex-column">
+                                <span className="font-weight-700">
+                                  {item.name}
+                                </span>
+                                {/* <span className="tablets-strip">
                           strip of 15 tablets
                         </span> */}
-                            </div>
-
-                            <div className="checkout-price">
-                              Rs. {item.sell_price * Number(item.count)}
-                            </div>
-                          </div>
-
-                          <div className="checkout-page--counter-wrapper">
-                            <div className="checkout-counter--wrapper">
-                              <div
-                                className="increment-decrement-counter-wrapper"
-                                onClick={() => {
-                                  decrementCountHandler(item);
-                                }}
-                              >
-                                -
                               </div>
-                              &nbsp;
-                              <div className="checkout-page--counter-value">
-                                {item.count}
-                              </div>
-                              &nbsp;
-                              <div
-                                className="increment-decrement-counter-wrapper"
-                                onClick={() => {
-                                  incrementCountHandler(item);
-                                }}
-                              >
-                                +
+
+                              <div className="checkout-price">
+                                Rs. {item.sell_price * Number(item.count)}
                               </div>
                             </div>
-                            <div>
-                              <Button
-                                variant="secondary"
-                                size="sm"
-                                onClick={() => {
-                                  removeOrderHandler(item);
-                                }}
-                              >
-                                Remove
-                              </Button>
+
+                            <div className="checkout-page--counter-wrapper">
+                              <div className="checkout-counter--wrapper">
+                                <div
+                                  className="increment-decrement-counter-wrapper"
+                                  onClick={() => {
+                                    decrementCountHandler(item);
+                                  }}
+                                >
+                                  -
+                                </div>
+                                &nbsp;
+                                <div className="checkout-page--counter-value">
+                                  {item.count}
+                                </div>
+                                &nbsp;
+                                <div
+                                  className="increment-decrement-counter-wrapper"
+                                  onClick={() => {
+                                    incrementCountHandler(item);
+                                  }}
+                                >
+                                  +
+                                </div>
+                              </div>
+                              <div>
+                                <Button
+                                  variant="secondary"
+                                  size="sm"
+                                  onClick={() => {
+                                    removeOrderHandler(item);
+                                  }}
+                                >
+                                  Remove
+                                </Button>
+                              </div>
+                            </div>
+                          </section>
+                        ))}
+                      </Card.Body>
+                    </Card>
+                  </div>
+                  <div className="checkout-payment-details">
+                    <Card>
+                      <Card.Body>
+                        <div className="opacity-6">PAYMENT DETAILS</div>
+                        <div className="total-amount">
+                          <div>Total Amount *</div>
+                          <div>Rs. {totalAmount}</div>
+                        </div>
+
+                        <div className="total-amoount-wrapper">
+                          <div className="flex-column">
+                            <div className="total-amount-wrapper">
+                              TOTAL AMOUNT
+                            </div>
+                            <div className="font-weight-bold">
+                              Rs. {totalAmount}
                             </div>
                           </div>
-                        </section>
-                      ))}
-                    </Card.Body>
-                  </Card>
-                </div>
-                <div className="checkout-payment-details">
-                  <Card>
-                    <Card.Body>
-                      <div className="opacity-6">PAYMENT DETAILS</div>
-                      <div className="total-amount">
-                        <div>Total Amount *</div>
-                        <div>Rs. {totalAmount}</div>
-                      </div>
-
-                      <div className="total-amoount-wrapper">
-                        <div className="flex-column">
-                          <div className="total-amount-wrapper">
-                            TOTAL AMOUNT
-                          </div>
-                          <div className="font-weight-bold">
-                            Rs. {totalAmount}
+                          <div>
+                            <Button
+                              className="checkout-proceed-button"
+                              onClick={() => {
+                                checkMedicineAvailability();
+                              }}
+                            >
+                              DOWNLOAD INVOICE
+                            </Button>
                           </div>
                         </div>
-                        <div>
-                          <Button
-                            className="checkout-proceed-button"
-                            onClick={() => {
-                              checkMedicineAvailability();
-                            }}
-                          >
-                            DOWNLOAD INVOICE
-                          </Button>
-                        </div>
-                      </div>
-                    </Card.Body>
-                  </Card>
+                      </Card.Body>
+                    </Card>
+                  </div>
                 </div>
-              </div>
-            </>
-          ) : (
-            <EmptyState
-              actions={
-                <h5 className="empty-state-cart">
-                  Please add a medicine to cart
-                </h5>
-              }
-            />
-          )}
-        </>
-      )}
-    </div>
+              </>
+            ) : (
+              <EmptyState
+                actions={
+                  <h5 className="empty-state-cart">
+                    Please add a medicine to cart
+                  </h5>
+                }
+              />
+            )}
+          </>
+        )}
+      </div>
     </>
   );
 };

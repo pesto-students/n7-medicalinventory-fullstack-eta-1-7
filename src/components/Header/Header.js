@@ -45,6 +45,7 @@ const Header = () => {
         config
       )
       .then((response) => {
+        ls.remove('token')
         toast.success("Logout successfully");
       })
       .catch((error) => {

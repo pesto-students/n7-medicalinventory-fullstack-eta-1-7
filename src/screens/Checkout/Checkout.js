@@ -130,7 +130,7 @@ const Checkout = () => {
 
     let config = {
       headers: {
-        Authorization: `Token ${AUTH_TOKEN}`,
+        Authorization: `Token ${ls.get('token')}`,
       },
     };
 

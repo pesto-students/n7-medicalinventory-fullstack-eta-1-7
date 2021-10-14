@@ -142,6 +142,7 @@ const Checkout = () => {
       )
       .then((response) => {
         invoiceGenerator();
+        toast.success("Order Place ");
         console.log(response);
       })
       .catch((error) => {

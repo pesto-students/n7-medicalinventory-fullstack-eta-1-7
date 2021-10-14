@@ -5,12 +5,9 @@ import LoginScreen from "./screens/LoginScreen/LoginScreen";
 import HomeScreen from "./screens/HomeScreen/HomeScreen";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  createTokenAsync,
   log,
   logout,
-  selectIsAdmin,
   selectLoggedIn,
-  selectUser,
 } from "./features/login/loginSlice";
 import Landing from "./screens/LoginScreen/Landing";
 import Employee from "./screens/Employee/Employee";
@@ -19,7 +16,6 @@ import ErrorBoundry from "./components/ErrorBoundary/ErrorBoundary";
 import { AUTH_TOKEN } from "./localStorage";
 import Loader from "./components/Loader/Loader";
 import axios from './axios'
-import { useHistory } from "react-router";
 import ls from 'local-storage'
 import { currentShop } from "./features/shop/shopSlice";
 const Checkout = React.lazy(() =>
@@ -38,9 +34,7 @@ const Medicine = React.lazy(() =>
 
 function App() {
   const loggedIn = useSelector(selectLoggedIn);
-  const isAdmin = useSelector(selectIsAdmin);
   const dispatch = useDispatch();
-  const history = useHistory();
   console.log(loggedIn);
   const shops = useSelector((state) => state.shop.shops);
   const checkTokenValidation = async () => {
@@ -64,8 +58,7 @@ function App() {
 
 }
   useEffect(() => {
-    const token = AUTH_TOKEN;
-    console.log(token);
+    const token = ls.get('token');
     if (token) {
       checkTokenValidation()
     }
@@ -74,7 +67,7 @@ function App() {
   return (
     <div className="app">
       <Router>
-        {!loggedIn ? (
+        {!ls.get('token') ? (
           <LoginScreen />
         ) : (
           <>

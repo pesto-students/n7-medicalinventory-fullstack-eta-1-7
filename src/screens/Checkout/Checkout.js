@@ -69,7 +69,7 @@ const Checkout = () => {
       city: "Clientcity",
       country: "Clientcountry",
     };
-    const invoiceNumber = "2021.0001";
+    const invoiceNumber = `2021.${Math.floor(1000 + Math.random() * 9000)}`;
     const invoiceDate = getFormattedDate();
     const products = filteredDataForInvoice;
     const bottomNotice = "Please visit again. Thank you.";
@@ -130,7 +130,7 @@ const Checkout = () => {
 
     let config = {
       headers: {
-        Authorization: `Token ${AUTH_TOKEN}`,
+        Authorization: `Token ${ls.get("token")}`,
       },
     };
 

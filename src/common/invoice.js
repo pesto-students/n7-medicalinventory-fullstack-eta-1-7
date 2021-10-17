@@ -1,6 +1,6 @@
 import easyinvoice from "easyinvoice";
 
-export const PDFInvoice = (
+export const PDFInvoice = async (
   logo,
   senderDetails,
   clientDetails,
@@ -60,7 +60,7 @@ export const PDFInvoice = (
     bottomNotice: bottomNotice,
   };
 
-  easyinvoice.createInvoice(data, function (result) {
+  await easyinvoice.createInvoice(data, function (result) {
     return easyinvoice.download("myInvoice.pdf", result.pdf);
   });
 };

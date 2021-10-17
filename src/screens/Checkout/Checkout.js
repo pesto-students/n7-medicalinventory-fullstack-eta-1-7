@@ -52,7 +52,7 @@ const Checkout = () => {
     return month + "/" + day + "/" + year;
   };
 
-  const invoiceGenerator = () => {
+  const invoiceGenerator = async () => {
     const logo =
       "https://www.logomoose.com/wp-content/uploads/2013/08/ms_moose.jpg";
     const senderDetails = {
@@ -73,7 +73,7 @@ const Checkout = () => {
     const invoiceDate = getFormattedDate();
     const products = filteredDataForInvoice;
     const bottomNotice = "Please visit again. Thank you.";
-    PDFInvoice(
+    await PDFInvoice(
       logo,
       senderDetails,
       clientDetails,
@@ -82,10 +82,9 @@ const Checkout = () => {
       products,
       bottomNotice
     );
-    setIsLoading(false);
-    setCartData([]);
-    ls.remove("cartData");
-    // history.goBack()
+    await setIsLoading(false);
+    await setCartData([]);
+    await ls.remove("cartData");
   };
 
   const decrementCountHandler = async (item) => {

@@ -1,5 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { Navbar, Container, Nav, Form, Button } from "react-bootstrap";
+import React, { useState, useEffect, useRef } from "react";
+import {
+  Navbar,
+  Container,
+  Nav,
+  Form,
+  Button,
+  Overlay,
+  Tooltip,
+} from "react-bootstrap";
 import {
   PersonCircle,
   CartFill,
@@ -12,16 +20,20 @@ import { useHistory, useLocation, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getSearchedData } from "../../features/search/searchSlice";
 import { logout, selectIsAdmin } from "../../features/login/loginSlice";
-import ls from 'local-storage'
+import ls from "local-storage";
 import axios from "axios";
 import { toast } from "../../components/Toast/Toast";
 const Header = () => {
+  const target = useRef(null);
+  const profileTarget = useRef(null);
   const dispatch = useDispatch();
-  const isAdmin = useSelector(selectIsAdmin)
+  const isAdmin = useSelector(selectIsAdmin);
   const history = useHistory();
   const location = useLocation();
   const [searchedQuery, setSearchedQuery] = useState("");
   const [isHeaderExpanded, setIsHeaderExpanded] = useState(false);
+  const [show, setShow] = useState(false);
+  const [showLogout, setShowLogout] = useState(false);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -35,22 +47,19 @@ const Header = () => {
   const logoutToken = async () => {
     const config = {
       headers: {
-        Authorization: `Token ${ls.get('token')}`,
+        Authorization: `Token ${ls.get("token")}`,
       },
     };
 
     await axios
-      .get(
-        "https://abdulrashidalaskar.pythonanywhere.com/logout/",
-        config
-      )
+      .get("https://abdulrashidalaskar.pythonanywhere.com/logout/", config)
       .then((response) => {
         toast.success("Logout successfully");
       })
       .catch((error) => {
         toast.error(error.message || "Something went wrong!");
       });
-  }
+  };
 
   const getFilteredData = async () => {
     if (searchedQuery) {
@@ -76,7 +85,9 @@ const Header = () => {
         }}
       >
         <Container fluid>
-          <Navbar.Brand onClick={() => history.replace('/')}>Medical Inventory</Navbar.Brand>
+          <Navbar.Brand onClick={() => history.replace("/")}>
+            Medical Inventory
+          </Navbar.Brand>
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse
             id="responsive-navbar-nav"
@@ -146,13 +157,34 @@ const Header = () => {
                     history.push("/checkout");
                   }}
                 />
+                <Overlay
+                  show={show}
+                  target={target.current}
+                  rootClose={true}
+                  onHide={() => setShow(!show)}
+                  rootCloseEvent="click"
+                  placement="bottom-end"
+                >
+                  <Tooltip>
+                    <div className="logout-overlay-tooltip">
+                      <Button
+                        onClick={() => {
+                          logoutToken();
+                          dispatch(logout());
+                        }}
+                      >
+                        Logout
+                      </Button>
+                    </div>
+                  </Tooltip>
+                </Overlay>
                 <PersonCircle
+                  ref={target}
                   size={30}
                   color="#28b8b0"
                   className="cursor-pointer"
                   onClick={() => {
-                    logoutToken()
-                   dispatch(logout())
+                    setShow(!show);
                   }}
                 />
               </div>
@@ -192,7 +224,36 @@ const Header = () => {
             <Nav className="nav-bar--small-screen">
               <div className="nav-bar-icons--responsive">
                 <span>
-                  <PersonCircle size={30} color="#28b8b0" />
+                  <Overlay
+                    show={showLogout}
+                    target={profileTarget.current}
+                    rootClose={true}
+                    onHide={() => setShowLogout(!showLogout)}
+                    rootCloseEvent="click"
+                    placement="bottom-start"
+                  >
+                    <Tooltip>
+                      <div className="logout-overlay-tooltip">
+                        <Button
+                          onClick={() => {
+                            logoutToken();
+                            dispatch(logout());
+                          }}
+                        >
+                          Logout
+                        </Button>
+                      </div>
+                    </Tooltip>
+                  </Overlay>
+                  <PersonCircle
+                    ref={profileTarget}
+                    size={30}
+                    color="#28b8b0"
+                    className="cursor-pointer"
+                    onClick={() => {
+                      setShowLogout(!showLogout);
+                    }}
+                  />
                 </span>
                 &nbsp; Profile
               </div>

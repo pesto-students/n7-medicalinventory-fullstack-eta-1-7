@@ -68,3 +68,7 @@
   cursor: pointer;
   margin-top: 0.5rem;
 }
+
+.logout-overlay-tooltip {
+  padding: 8px;
+}

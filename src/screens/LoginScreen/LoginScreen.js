@@ -17,53 +17,57 @@ const LoginScreen = () => {
 
   useEffect(() => {
     if (guestLogin === "admin" || guestLogin === "employee") {
-      handleSubmit();
+      submitData();
     }
   }, [guestLogin]);
 
+  const submitData = async () => {
+    try {
+      const response = await axios.post(
+        "/api-token-auth/",
+        {},
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          auth: {
+            username:
+              guestLogin === "admin"
+                ? "admin"
+                : guestLogin === "employee"
+                ? "kunal"
+                : name,
+            password:
+              guestLogin === "admin" || guestLogin === "employee"
+                ? "1234"
+                : password,
+          },
+        }
+      );
+      dispatch(
+        log({
+          admin: response.data.isAdmin,
+          employee: response.data.employeeId,
+          company: response.data.companyId,
+        })
+      );
+      if (!response.data.isAdmin) {
+        dispatch(currentShop(response.data.companyId));
+      }
+      setAuthToken("token", response.data.token);
+      setAuthToken("isAdmin", response.data.isAdmin ? "true" : "false");
+      setGuestLogin("");
+      history.replace("/");
+    } catch (error) {
+      setGuestLogin("");
+      console.log(error.message);
+      toast.error("Authentication denied");
+    }
+  };
+
   const handleSubmit = async () => {
     if (name.trim().length > 0 && password.trim().length > 0) {
-      try {
-        const response = await axios.post(
-          "/api-token-auth/",
-          {},
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-            auth: {
-              username:
-                guestLogin === "admin"
-                  ? "admin"
-                  : guestLogin === "employee"
-                  ? "kunal"
-                  : name,
-              password:
-                guestLogin === "admin" || guestLogin === "employee"
-                  ? "1234"
-                  : password,
-            },
-          }
-        );
-        dispatch(
-          log({
-            admin: response.data.isAdmin,
-            employee: response.data.employeeId,
-            company: response.data.companyId,
-          })
-        );
-        if (!response.data.isAdmin) {
-          dispatch(currentShop(response.data.companyId));
-        }
-        setAuthToken("token", response.data.token);
-        setAuthToken("isAdmin", response.data.isAdmin ? "true" : "false");
-        setGuestLogin("");
-        history.replace("/");
-      } catch (error) {
-        setGuestLogin("");
-        console.log(error.message);
-        toast.error("Authentication denied");
-      }
+      submitData();
     } else {
       setGuestLogin("");
       toast.error("no Data");

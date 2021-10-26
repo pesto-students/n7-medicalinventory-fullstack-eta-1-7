@@ -8,7 +8,7 @@ import './Home.css'
 import Header from "../../components/Header/Header";
 import Button from 'react-bootstrap/Button';
 import { useHistory } from 'react-router';
-function HomeScreen() {
+function HomeScreen({setToken}) {
     const dispatch = useDispatch()
     const history = useHistory()
     const shops = useSelector(state => state.shop.shops)
@@ -37,7 +37,7 @@ function HomeScreen() {
                 </Card.Body>
               </Card>
 
-            )) : <Header/>}
+            )) : <Header setToken={setToken}/>}
 
              
         </div>

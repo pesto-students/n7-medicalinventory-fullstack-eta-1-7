@@ -10,7 +10,8 @@ const initialState = {
   isAdmin: false,
   error: "",
   employeeId:null,
-  companyId:null
+  companyId:null,
+  logout:false
 };
 
 export const createTokenAsync = createAsyncThunk(
@@ -36,8 +37,10 @@ export const loginSlice = createSlice({
     logout:(state) => {
       state.loggedIn = false;
       state.isAdmin = false;
-      state.employeeId= null
-      state.companyId = null
+      state.employeeId= null;
+      state.companyId = null;
+      state.logout = false
+
 
     },
     log: (state,action) => {
@@ -69,4 +72,5 @@ export const { log,logout } = loginSlice.actions;
 export const selectUser = (state) => state;
 export const selectLoggedIn = (state) => state.login.loggedIn;
 export const selectIsAdmin = (state) => state.login.isAdmin;
+export const selectLogout = (state) => state.login.logout;
 export default loginSlice.reducer;

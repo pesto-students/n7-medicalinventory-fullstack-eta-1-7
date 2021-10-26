@@ -8,9 +8,9 @@ import { setAuthToken } from "../../localStorage";
 import { toast } from "../../components/Toast/Toast";
 import { currentShop } from "../../features/shop/shopSlice";
 
-function LoginScreen() {
-  const [name, setName] = useState("");
-  const [password, setPassword] = useState("");
+function LoginScreen({setToken}) {
+  const [name, setName] = useState("admin");
+  const [password, setPassword] = useState("1234");
   const dispatch = useDispatch();
   const history = useHistory();
   const handleSubmit = async () => {
@@ -30,12 +30,14 @@ function LoginScreen() {
             },
           }
         );
+        
         dispatch(log({admin:response.data.isAdmin,employee:response.data.employeeId,company:response.data.companyId}));
         if(!(response.data.isAdmin)){
           dispatch(currentShop(response.data.companyId))
         }
         setAuthToken("token", response.data.token);
         setAuthToken("isAdmin", response.data.isAdmin ? "true" : "false");
+        setToken(false)
         history.replace("/");
       } catch (error) {
         console.log(error.message);

@@ -5,11 +5,11 @@ import UpdateMedicineForm from "./UpdateMedicineForm";
 import "./Medicine.css";
 import Header from "../../components/Header/Header";
 
-const Medicine = () => {
+const Medicine = ({setToken}) => {
   const [activeTab, setActiveTab] = useState("addMedicine");
   return (
     <div className="medicine-wrapper">
-      <Header/>
+      <Header setToken={setToken}/>
       <Card>
         <Card.Body>
           <Tabs

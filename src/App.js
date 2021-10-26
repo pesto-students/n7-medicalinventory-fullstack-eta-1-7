@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect,useState } from "react";
 import "./App.css";
 import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
 import LoginScreen from "./screens/LoginScreen/LoginScreen";
@@ -8,6 +8,7 @@ import {
   log,
   logout,
   selectLoggedIn,
+  selectLogout,
 } from "./features/login/loginSlice";
 import Landing from "./screens/LoginScreen/Landing";
 import Employee from "./screens/Employee/Employee";
@@ -34,9 +35,11 @@ const Medicine = React.lazy(() =>
 
 function App() {
   const loggedIn = useSelector(selectLoggedIn);
+  const logoutVal = useSelector(selectLogout)
   const dispatch = useDispatch();
-  console.log(loggedIn);
   const shops = useSelector((state) => state.shop.shops);
+  const [token, setToken] = useState(ls.get('token') ? false :true)
+
   const checkTokenValidation = async () => {
     try {
         const response = await axios.post('/api-token-auth/',{},{
@@ -57,18 +60,28 @@ function App() {
       }
 
 }
+
   useEffect(() => {
     const token = ls.get('token');
+
     if (token) {
+      setToken(false)
       checkTokenValidation()
     }
   }, []);
 
+  window.onstorage = function(e) {
+    if(e.key === "token"){
+     setToken(prevState => !prevState)
+    }
+
+  };
+  
   return (
     <div className="app">
       <Router>
-        {!ls.get('token') ? (
-          <LoginScreen />
+        {token ? (
+          <LoginScreen setToken={setToken} />
         ) : (
           <>
             <React.Suspense fallback={<Loader />}>
@@ -80,12 +93,19 @@ function App() {
                     <Route
                       exact
                       path="/"
-                      component={shops.length === 0 ? Landing : HomeScreen}
-                    ></Route>
+                    >
+  	                  {shops.length === 0 ? <Landing/> : <HomeScreen setToken={setToken}/>}
+                    </Route>
                     <Route path="/employee" component={Employee}></Route>
-                    <Route path="/search/:params?" component={SearchPage} />
-                    <Route path="/checkout" component={Checkout} />
-                    <Route path="/medicine" component={Medicine} />
+                    <Route path="/search/:params?" render={(props) => (
+                        <SearchPage {...props} setToken={setToken} />
+                      )} />
+                    <Route path="/checkout" >
+                      <Checkout setToken={setToken}/>
+                    </Route>
+                    <Route path="/medicine" >
+                      <Medicine setToken={setToken}/>
+                    </Route>
                   </Switch>
                 </div>
               </ErrorBoundry>

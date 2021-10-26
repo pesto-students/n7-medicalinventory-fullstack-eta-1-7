@@ -50,7 +50,7 @@ const AGE = [
   { label: "Child", value: "Child" },
 ];
 
-const SearchPage = ({ location }) => {
+const SearchPage = ({ location,setToken }) => {
   const history = useHistory();
   const dispatch = useDispatch();
   const params = new URLSearchParams(location.search);
@@ -214,7 +214,7 @@ const SearchPage = ({ location }) => {
   ) {
     return (
       <>
-      <Header/>
+      <Header setToken={setToken} />
         <div className="search-page-wrapper">
           <div className="search-page--left-panel">
             <div className="m-b-12 clear-filter-wrapper">

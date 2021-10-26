@@ -4,7 +4,6 @@ import TextField from "../../components/TextField/TextField";
 import * as Yup from "yup";
 import { Formik, Form } from "formik";
 import axios from "axios";
-import { AUTH_TOKEN } from "../../localStorage";
 import { toast } from "../../components/Toast/Toast";
 import { instanceShop } from "../../features/shop/shopSlice";
 import {useSelector} from 'react-redux'

@@ -10,7 +10,7 @@ import Loader from "../../components/Loader/Loader";
 import { toast } from "../../components/Toast/Toast";
 import { useHistory } from "react-router";
 import Header from "../../components/Header/Header";
-const Checkout = () => {
+const Checkout = ({setToken}) => {
   const [cartData, setCartData] = useState([]);
   const [totalAmount, setTotalAmount] = useState(0);
   const [filteredDataForInvoice, setFilteredDataForInvoice] = useState([]);
@@ -154,7 +154,7 @@ const Checkout = () => {
 
   return (
     <>
-    <Header/>
+    <Header setToken={setToken}/>
     <div className="checkout-page-wrapper">
       
       {isLoading ? (

@@ -15,7 +15,8 @@ import { logout, selectIsAdmin } from "../../features/login/loginSlice";
 import ls from 'local-storage'
 import axios from "axios";
 import { toast } from "../../components/Toast/Toast";
-const Header = () => {
+import { setAuthToken } from "../../localStorage";
+const Header = ({setToken}) => {
   const dispatch = useDispatch();
   const isAdmin = useSelector(selectIsAdmin)
   const history = useHistory();
@@ -33,7 +34,9 @@ const Header = () => {
   }, []);
 
   const logoutToken = async () => {
+    console.log(ls.get('token'))
     const config = {
+     
       headers: {
         Authorization: `Token ${ls.get('token')}`,
       },
@@ -152,8 +155,11 @@ const Header = () => {
                   color="#28b8b0"
                   className="cursor-pointer"
                   onClick={() => {
+                    setToken(true)
+                    
                     logoutToken()
                    dispatch(logout())
+                   ls.remove('token')
                   }}
                 />
               </div>

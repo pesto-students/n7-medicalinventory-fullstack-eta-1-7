@@ -118,6 +118,7 @@ const UpdateMedicineForm = () => {
                             onClick={() => {
                               setMed(item.name);
                               setMedId(item.id)
+                              setSearchSelectorData("")
                             }}
                             className="header-form-control form-control"
                           >

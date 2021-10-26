@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "../../axios";
 import "./Login.css";
@@ -11,11 +11,17 @@ import { currentShop } from "../../features/shop/shopSlice";
 const LoginScreen = () => {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
+  const [guestLogin, setGuestLogin] = useState("");
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  useEffect(() => {
+    if (guestLogin === "admin" || guestLogin === "employee") {
+      handleSubmit();
+    }
+  }, [guestLogin]);
+
+  const handleSubmit = async () => {
     if (name.trim().length > 0 && password.trim().length > 0) {
       try {
         const response = await axios.post(
@@ -26,8 +32,16 @@ const LoginScreen = () => {
               "Content-Type": "application/json",
             },
             auth: {
-              username: name,
-              password: password,
+              username:
+                guestLogin === "admin"
+                  ? "admin"
+                  : guestLogin === "employee"
+                  ? "kunal"
+                  : name,
+              password:
+                guestLogin === "admin" || guestLogin === "employee"
+                  ? "1234"
+                  : password,
             },
           }
         );
@@ -43,12 +57,15 @@ const LoginScreen = () => {
         }
         setAuthToken("token", response.data.token);
         setAuthToken("isAdmin", response.data.isAdmin ? "true" : "false");
+        setGuestLogin("");
         history.replace("/");
       } catch (error) {
+        setGuestLogin("");
         console.log(error.message);
         toast.error("Authentication denied");
       }
     } else {
+      setGuestLogin("");
       toast.error("no Data");
     }
   };
@@ -107,17 +124,15 @@ const LoginScreen = () => {
                 type="submit"
                 value="Login as guest (Admin)"
                 onClick={async (e) => {
-                  await setName("admin");
-                  await setPassword("1234");
-                  await handleSubmit(e);
+                  e.preventDefault();
+                  await setGuestLogin("admin");
                 }}
               />
               <div
                 className="guest-login-employee"
                 onClick={async (e) => {
-                  await setName("kunal");
-                  await setPassword("1234");
-                  await handleSubmit(e);
+                  e.preventDefault();
+                  await setGuestLogin("employee");
                 }}
               >
                 Login as guest (Employee)

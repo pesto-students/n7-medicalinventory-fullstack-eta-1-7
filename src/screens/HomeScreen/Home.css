@@ -1,0 +1,19 @@
+:root {
+  --header-height: 0px;
+}
+.home__container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.search-note-wrapper {
+  text-align: center;
+  margin-top: calc(36px + 1.375rem);
+}
+
+.search-note--content {
+  padding-bottom: 40px;
+}
